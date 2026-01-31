@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject transitionState;
     [SerializeField] private GameObject player1Text;
     [SerializeField] private GameObject player2Text;
+    [SerializeField] private GameObject continueButton;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI timerText;
@@ -66,10 +67,6 @@ public class GameManager : MonoBehaviour
         }
         if (currentState == GameState.Title && Input.anyKeyDown)
         {
-            RequestStateChange(GameState.Transition);
-        }
-        else if (currentState == GameState.Transition && Input.anyKeyDown)
-        {
             RequestStateChange(GameState.Draw);
         }
     }
@@ -84,7 +81,7 @@ public class GameManager : MonoBehaviour
 
         if (drawTimer <= 0f)
         {
-            sketchSystem.drawingEnabled = false;
+            sketchSystem.active = false;
             RequestStateChange(GameState.Order);
         }
     }
@@ -127,11 +124,20 @@ public class GameManager : MonoBehaviour
         transitionController.Close();
     }
 
+    public void OnContinueButtonPressed()
+    {
+        continueButton.SetActive(false);
+        transitionController.Open();
+    }
+
     private void OnTransitionClosed()
     {
         Debug.Log("OnTransitionMiddle: " + pendingState);
         SetStateImmediate(pendingState);
-        transitionController.Open();
+        if (currentState == GameState.Draw)
+            sketchSystem.gameObject.SetActive(true);
+
+        continueButton.SetActive(true);
     }
 
     private void OnTransitionOpen()
@@ -139,6 +145,9 @@ public class GameManager : MonoBehaviour
         Debug.Log("OnTransitionComplete: ");
         inputLocked = false;
         transitionState.SetActive(false);
+
+        if (currentState == GameState.Draw)
+            sketchSystem.active = true;
     }
 
     private void SetStateImmediate(GameState state)

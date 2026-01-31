@@ -7,7 +7,6 @@ public class DrawPhase : GamePhase
 {
     [Header("Drawing Area (Image RectTransform)")]
     [SerializeField] private RectTransform drawArea;
-    [SerializeField] private TextMeshProUGUI debugText;
 
     [Header("Drawing Settings")]
     [SerializeField] private Camera uiCamera;
@@ -22,12 +21,8 @@ public class DrawPhase : GamePhase
     private readonly List<LineRenderer> allLineRenderers = new List<LineRenderer>();
     private LineRenderer currentLineRenderer;
 
-    public bool drawingEnabled;
-
     void OnEnable()
     {
-        active = true;
-
         if (uiCamera == null)
         {
             uiCamera = Camera.main;
@@ -55,28 +50,20 @@ public class DrawPhase : GamePhase
         {
             currentLineRenderer.positionCount = 0;
         }
-
-        drawingEnabled = true;
     }
 
     void OnDisable()
     {
         active = false;
-        drawingEnabled = false;
     }
 
     protected override void UpdatePhase()
     {
-        if (!drawingEnabled || GameManager.inputLocked)
+        if (!active || GameManager.inputLocked)
             return;
 
         Vector2 mousePos = Input.mousePosition;
         bool inside = IsMouseOver(drawArea.GetComponent<Image>());
-
-        if (debugText != null)  
-        {
-            debugText.text = $"Mouse Pos: {mousePos}\nInside Draw Area: {inside}\nPoints Count: {currentPoints.Count}";
-        }
 
         if (Input.GetMouseButtonDown(0) && inside)
         {
