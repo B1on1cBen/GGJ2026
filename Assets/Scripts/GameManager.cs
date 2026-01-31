@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject drawState;
     [SerializeField] private GameObject orderState;
     [SerializeField] private GameObject transitionState;
+    [SerializeField] private GameObject player1Text;
+    [SerializeField] private GameObject player2Text;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI playerSwitchText;
@@ -44,8 +46,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        transitionController.TransitionMiddleReached += OnTransitionMiddle;
-        transitionController.TransitionCompleted += OnTransitionComplete;
+        transitionController.TransitionOnClosed += OnTransitionClosed;
+        transitionController.TransitionOnOpen += OnTransitionOpen;
     }
 
 #if UNITY_EDITOR
@@ -130,16 +132,17 @@ public class GameManager : MonoBehaviour
         pendingState = next;
         inputLocked = true;
         SetStateImmediate(GameState.Transition);
-        transitionController.Play();
+        transitionController.Close();
     }
 
-    private void OnTransitionMiddle()
+    private void OnTransitionClosed()
     {
         Debug.Log("OnTransitionMiddle: " + pendingState);
         SetStateImmediate(pendingState);
+        transitionController.Open();
     }
 
-    private void OnTransitionComplete()
+    private void OnTransitionOpen()
     {
         Debug.Log("OnTransitionComplete: ");
         inputLocked = false;
@@ -158,11 +161,6 @@ public class GameManager : MonoBehaviour
         if (state == GameState.Intro)
         {
             introTimer = introDuration;
-        }
-        else if (state == GameState.PlayerSwitch)
-        {
-            if (playerSwitchText != null)
-                playerSwitchText.text = currentPlayer == 1 ? "Player 1 - Draw" : "Player 2 - Draw";
         }
         else if (state == GameState.Draw)
         {
