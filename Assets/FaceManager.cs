@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FaceManager : MonoBehaviour
 {
@@ -24,14 +25,14 @@ public class FaceManager : MonoBehaviour
     [SerializeField] private Sprite selectedNose;
 
     [Header("Face Part Renderers")]
-    [SerializeField] private SpriteRenderer eyesRenderer;
-    [SerializeField] private SpriteRenderer mouthRenderer;
-    [SerializeField] private SpriteRenderer earsRenderer;
-    [SerializeField] private SpriteRenderer hairRenderer;
-    [SerializeField] private SpriteRenderer accessoryRenderer;
-    [SerializeField] private SpriteRenderer facialHairRenderer;
-    [SerializeField] private SpriteRenderer eyebrowsRenderer;
-    [SerializeField] private SpriteRenderer noseRenderer;
+    [SerializeField] private Image eyesRenderer;
+    [SerializeField] private Image mouthRenderer;
+    [SerializeField] private Image earsRenderer;
+    [SerializeField] private Image hairRenderer;
+    [SerializeField] private Image accessoryRenderer;
+    [SerializeField] private Image facialHairRenderer;
+    [SerializeField] private Image eyebrowsRenderer;
+    [SerializeField] private Image noseRenderer;
 
     [Header("Face Seed")]
     [SerializeField] private int faceSeed;

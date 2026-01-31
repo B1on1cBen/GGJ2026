@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Suspect : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer bodySprite;
+    [SerializeField] private Image bodySprite;
 
     private static List<Sprite> bodySprites = new List<Sprite>();
     private static bool bodiesLoaded;
