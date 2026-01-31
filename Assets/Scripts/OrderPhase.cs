@@ -13,6 +13,7 @@ public class OrderPhase : GamePhase
     [SerializeField] private EventSystem eventSystem;
 
     private Suspect _hoveredSuspect;
+    private Shaker hoveredSuspectShaker;
     private Suspect _selectedSuspect;
     private RectTransform _hoveredSuspectRectTransform;
     private readonly List<RaycastResult> _uiHits = new List<RaycastResult>();
@@ -43,11 +44,11 @@ public class OrderPhase : GamePhase
         _hoveredSuspect = null;
         for (int i = 0; i < _uiHits.Count; i++)
         {
-            var go = _uiHits[i].gameObject;
-            var rt = go.GetComponent<RectTransform>();
-            if (rt != null && go.GetComponentInParent<Suspect>() != null)
+            var go = _uiHits[i].gameObject.GetComponentInParent<Suspect>();
+            if (go != null)
             {
-                _hoveredSuspect = go.GetComponentInParent<Suspect>();
+                _hoveredSuspect = go;
+                StartCoroutine(go.gameObject.GetComponent<Shaker>().Shake(3f, 3f));
                 break;
             }
         }
@@ -62,6 +63,7 @@ public class OrderPhase : GamePhase
             else
             {
                 hoverArrow.gameObject.SetActive(false);
+                StopAllCoroutines();
             }
         }
     }
