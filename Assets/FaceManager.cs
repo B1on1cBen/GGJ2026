@@ -36,6 +36,10 @@ public class FaceManager : MonoBehaviour
     [SerializeField] private SpriteRenderer eyebrowsRenderer;
     [SerializeField] private SpriteRenderer noseRenderer;
 
+    [Header("Face Seed")]
+    [SerializeField] private int faceSeed;
+    public int FaceSeed => faceSeed;
+
     void Awake()
     {
         heads = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Head"));
@@ -51,6 +55,22 @@ public class FaceManager : MonoBehaviour
 
     public void GenerateFace()
     {
+        GenerateFace(null);
+    }
+
+    public void GenerateFace(int? seed)
+    {
+        var previousState = Random.state;
+        if (seed.HasValue)
+        {
+            faceSeed = seed.Value;
+            Random.InitState(faceSeed);
+        }
+        else
+        {
+            faceSeed = Random.Range(int.MinValue, int.MaxValue);
+        }
+
         selectedHead = heads.Count > 0 ? heads[Random.Range(0, heads.Count)] : null;
         selectedEyes = eyes.Count > 0 ? eyes[Random.Range(0, eyes.Count)] : null;
         selectedMouth = mouths.Count > 0 ? mouths[Random.Range(0, mouths.Count)] : null;
@@ -70,5 +90,7 @@ public class FaceManager : MonoBehaviour
         facialHairRenderer.sprite = selectedFacialHair;
         eyebrowsRenderer.sprite = selectedEyebrows;
         noseRenderer.sprite = selectedNose;
+
+        Random.state = previousState;
     }
 }
