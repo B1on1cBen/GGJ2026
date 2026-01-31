@@ -40,8 +40,18 @@ public class FaceManager : MonoBehaviour
     [SerializeField] private int faceSeed;
     public int FaceSeed => faceSeed;
 
+    static bool loaded = false;
+
     void Awake()
     {
+        EnsureFacePartsLoaded();
+    }
+
+    void EnsureFacePartsLoaded()
+    {
+        if (loaded) return;
+        loaded = true;
+
         heads = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Head"));
         eyes = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Eyes"));
         mouths = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Mouth"));
@@ -51,12 +61,12 @@ public class FaceManager : MonoBehaviour
         facialHair = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/FacialHair"));
         eyebrows = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Eyebrows"));
         noses = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Nose"));
-
-        GenerateFace(null);
     }
 
     public void GenerateFace(int? seed)
     {
+        EnsureFacePartsLoaded();
+
         var previousState = Random.state;
         if (seed.HasValue)
         {
