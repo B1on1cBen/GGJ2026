@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class FaceManager : MonoBehaviour
 {
-    private static bool isLoaded;
-
     [Header("Loaded Face Parts")]
     [SerializeField] private static List<Sprite> heads = new List<Sprite>();
     [SerializeField] private static List<Sprite> eyes = new List<Sprite>();
@@ -14,6 +12,7 @@ public class FaceManager : MonoBehaviour
     [SerializeField] private static List<Sprite> accessories = new List<Sprite>();
     [SerializeField] private static List<Sprite> facialHair = new List<Sprite>();
     [SerializeField] private static List<Sprite> eyebrows = new List<Sprite>();
+    [SerializeField] private static List<Sprite> noses = new List<Sprite>();
 
     [Header("Selected Face Parts")]
     [SerializeField] private Sprite selectedHead;
@@ -24,6 +23,7 @@ public class FaceManager : MonoBehaviour
     [SerializeField] private Sprite selectedAccessory;
     [SerializeField] private Sprite selectedFacialHair;
     [SerializeField] private Sprite selectedEyebrows;
+    [SerializeField] private Sprite selectedNose;
 
     [Header("Face Part Renderers")]
     [SerializeField] private SpriteRenderer headRenderer;
@@ -34,6 +34,7 @@ public class FaceManager : MonoBehaviour
     [SerializeField] private SpriteRenderer accessoryRenderer;
     [SerializeField] private SpriteRenderer facialHairRenderer;
     [SerializeField] private SpriteRenderer eyebrowsRenderer;
+    [SerializeField] private SpriteRenderer noseRenderer;
 
     void Awake()
     {
@@ -45,15 +46,7 @@ public class FaceManager : MonoBehaviour
         accessories = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Accessories"));
         facialHair = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/FacialHair"));
         eyebrows = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Eyebrows"));
-
-        if (headRenderer == null) headRenderer = gameObject.AddComponent<SpriteRenderer>();
-        if (eyesRenderer == null) eyesRenderer = gameObject.AddComponent<SpriteRenderer>();
-        if (mouthRenderer == null) mouthRenderer = gameObject.AddComponent<SpriteRenderer>();
-        if (earsRenderer == null) earsRenderer = gameObject.AddComponent<SpriteRenderer>();
-        if (hairRenderer == null) hairRenderer = gameObject.AddComponent<SpriteRenderer>();
-        if (accessoryRenderer == null) accessoryRenderer = gameObject.AddComponent<SpriteRenderer>();
-        if (facialHairRenderer == null) facialHairRenderer = gameObject.AddComponent<SpriteRenderer>();
-        if (eyebrowsRenderer == null) eyebrowsRenderer = gameObject.AddComponent<SpriteRenderer>();
+        noses = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Nose"));
     }
 
     public void GenerateFace()
@@ -66,6 +59,7 @@ public class FaceManager : MonoBehaviour
         selectedAccessory = accessories.Count > 0 ? accessories[Random.Range(0, accessories.Count)] : null;
         selectedFacialHair = facialHair.Count > 0 ? facialHair[Random.Range(0, facialHair.Count)] : null;
         selectedEyebrows = eyebrows.Count > 0 ? eyebrows[Random.Range(0, eyebrows.Count)] : null;
+        selectedNose = noses.Count > 0 ? noses[Random.Range(0, noses.Count)] : null;
 
         headRenderer.sprite = selectedHead;
         eyesRenderer.sprite = selectedEyes;
@@ -75,5 +69,6 @@ public class FaceManager : MonoBehaviour
         accessoryRenderer.sprite = selectedAccessory;
         facialHairRenderer.sprite = selectedFacialHair;
         eyebrowsRenderer.sprite = selectedEyebrows;
+        noseRenderer.sprite = selectedNose;
     }
 }
