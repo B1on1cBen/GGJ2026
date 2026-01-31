@@ -13,11 +13,13 @@ public class SketchSystem : MonoBehaviour
     [Header("Drawing Settings")]
     [SerializeField] private Camera uiCamera;
     [SerializeField] private LineRenderer lineRenderer;
+    [SerializeField] private LineRenderer lineRendererPrefab;
     [SerializeField] private float minPointDistance = 0.01f;
     [SerializeField] private float worldZ = 0f;
 
     private bool isDrawing;
     private readonly List<Vector3> points = new List<Vector3>();
+    private LineRenderer currentLineRenderer;
 
     // Start is called before the first frame update
     void Start()
@@ -27,16 +29,17 @@ public class SketchSystem : MonoBehaviour
             uiCamera = Camera.main;
         }
 
-        if (lineRenderer != null)
+        currentLineRenderer = lineRenderer;
+        if (currentLineRenderer != null)
         {
-            lineRenderer.positionCount = 0;
+            currentLineRenderer.positionCount = 0;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (lineRenderer == null || drawArea == null || uiCamera == null)
+        if (currentLineRenderer == null || drawArea == null || uiCamera == null)
         {
             return;
         }
@@ -53,7 +56,10 @@ public class SketchSystem : MonoBehaviour
         {
             isDrawing = true;
             points.Clear();
-            lineRenderer.positionCount = 0;
+            currentLineRenderer = lineRendererPrefab != null
+                ? Instantiate(lineRendererPrefab, lineRenderer.transform.parent)
+                : lineRenderer;
+            currentLineRenderer.positionCount = 0;
             AddPoint(mousePos);
         }
         else if (Input.GetMouseButton(0) && isDrawing)
@@ -79,8 +85,9 @@ public class SketchSystem : MonoBehaviour
         }
 
         points.Add(world);
-        lineRenderer.positionCount = points.Count;
-        lineRenderer.SetPosition(points.Count - 1, world);
+        if (currentLineRenderer == null) return;
+        currentLineRenderer.positionCount = points.Count;
+        currentLineRenderer.SetPosition(points.Count - 1, world);
     }
 
     public bool IsMouseOver(Image targetImage)
