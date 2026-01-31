@@ -27,6 +27,16 @@ public class DrawPhase : GamePhase
             uiCamera = Camera.main;
         }
 
+        lineRenderer.gameObject.SetActive(true);
+        currentLineRenderer = lineRenderer;
+        if (currentLineRenderer != null)
+        {
+            currentLineRenderer.positionCount = 0;
+        }
+    }
+
+    void OnDisable()
+    {
         foreach (var lr in allLineRenderers)
         {
             if (lr == null) continue;
@@ -42,17 +52,6 @@ public class DrawPhase : GamePhase
         allLineRenderers.Clear();
         allPoints.Clear();
         currentPoints.Clear();
-
-        lineRenderer.gameObject.SetActive(true);
-        currentLineRenderer = lineRenderer;
-        if (currentLineRenderer != null)
-        {
-            currentLineRenderer.positionCount = 0;
-        }
-    }
-
-    void OnDisable()
-    {
         active = false;
     }
 
