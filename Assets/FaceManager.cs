@@ -51,10 +51,7 @@ public class FaceManager : MonoBehaviour
         facialHair = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/FacialHair"));
         eyebrows = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Eyebrows"));
         noses = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Nose"));
-    }
 
-    public void GenerateFace()
-    {
         GenerateFace(null);
     }
 
