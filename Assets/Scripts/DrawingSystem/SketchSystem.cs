@@ -93,11 +93,20 @@ public class SketchSystem : MonoBehaviour
     public bool IsMouseOver(Image targetImage)
     {
         if (targetImage == null) return false;
+
         var rect = targetImage.rectTransform;
+        var canvas = targetImage.canvas;
+        Camera eventCamera = null;
+
+        if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
+        {
+            eventCamera = canvas.worldCamera != null ? canvas.worldCamera : uiCamera;
+        }
+
         return RectTransformUtility.RectangleContainsScreenPoint(
             rect,
             Input.mousePosition,
-            null
+            eventCamera
         );
     }
 }
