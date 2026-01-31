@@ -42,27 +42,11 @@ public class FaceManager : MonoBehaviour
     public int FaceSeed => faceSeed;
 
     static bool init = false;
-    [SerializeField] bool generate;
 
     void Awake()
     {
         Init();
-
-        if (generate)
-        {
-            GenerateFace(null);
-        }
     }
-
-#if UNITY_EDITOR
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            GenerateFace(null);
-        }
-    }
-#endif
 
     void Init()
     {
