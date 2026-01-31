@@ -5,7 +5,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private FaceManager suspectPortrait;
     [SerializeField] private Suspect[] suspects;
-    [SerializeField] private SketchSystem sketchSystem;
+    [SerializeField] private DrawPhase sketchSystem;
 
     [Header("State GameObjects")]
     [SerializeField] private GameObject introState;
@@ -13,9 +13,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject drawState;
     [SerializeField] private GameObject orderState;
     [SerializeField] private GameObject transitionState;
+    [SerializeField] private GameObject player1Text;
+    [SerializeField] private GameObject player2Text;
 
     [Header("UI")]
-    [SerializeField] private TextMeshProUGUI playerSwitchText;
     [SerializeField] private TextMeshProUGUI timerText;
 
     [Header("Transition")]
@@ -27,11 +28,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float minDrawTime = 15f;
     [SerializeField] private float introDuration = 2f;
 
-    private enum GameState { Intro, Title, PlayerSwitch, Draw, Order, Transition }
+    private enum GameState { Intro, Title, Draw, Order, Transition }
     private GameState currentState = GameState.Intro;
     private GameState pendingState;
 
-    private bool inputLocked;
+    public static bool inputLocked;
     private int currentPlayer = 1;
     private int currentRound = 1;
     private float drawTimer;
@@ -44,8 +45,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        transitionController.TransitionMiddleReached += OnTransitionMiddle;
-        transitionController.TransitionCompleted += OnTransitionComplete;
+        transitionController.TransitionOnClosed += OnTransitionClosed;
+        transitionController.TransitionOnOpen += OnTransitionOpen;
     }
 
 #if UNITY_EDITOR
@@ -63,15 +64,13 @@ public class GameManager : MonoBehaviour
                 SetStateImmediate(GameState.Title);
             return;
         }
-
         if (currentState == GameState.Title && Input.anyKeyDown)
         {
-            RequestStateChange(GameState.PlayerSwitch);
+            RequestStateChange(GameState.Transition);
         }
-        else if (currentState == GameState.PlayerSwitch && Input.anyKeyDown)
+        else if (currentState == GameState.Transition && Input.anyKeyDown)
         {
             RequestStateChange(GameState.Draw);
-            sketchSystem.drawingEnabled = true;
         }
     }
 #endif
@@ -99,7 +98,7 @@ public class GameManager : MonoBehaviour
     {
         // stub event; hook from UI later
         AdvanceRoundAndPlayer();
-        RequestStateChange(GameState.PlayerSwitch);
+        RequestStateChange(GameState.Transition);
     }
 
     public void GenerateSuspectsWithPortraitSeed()
@@ -122,47 +121,38 @@ public class GameManager : MonoBehaviour
 
     private void RequestStateChange(GameState next)
     {
-        if (transitionController == null)
-        {
-            SetStateImmediate(next);
-            return;
-        }
         pendingState = next;
         inputLocked = true;
-        SetStateImmediate(GameState.Transition);
-        transitionController.Play();
+        transitionState.SetActive(true);
+        transitionController.Close();
     }
 
-    private void OnTransitionMiddle()
+    private void OnTransitionClosed()
     {
         Debug.Log("OnTransitionMiddle: " + pendingState);
         SetStateImmediate(pendingState);
+        transitionController.Open();
     }
 
-    private void OnTransitionComplete()
+    private void OnTransitionOpen()
     {
         Debug.Log("OnTransitionComplete: ");
         inputLocked = false;
+        transitionState.SetActive(false);
     }
 
     private void SetStateImmediate(GameState state)
     {
         currentState = state;
 
-        if (introState) introState.SetActive(state == GameState.Intro);
-        if (titleState) titleState.SetActive(state == GameState.Title);
-        if (drawState) drawState.SetActive(state == GameState.Draw);
-        if (orderState) orderState.SetActive(state == GameState.Order);
-        if (transitionState) transitionState.SetActive(state == GameState.Transition);
+        introState.SetActive(state == GameState.Intro);
+        titleState.SetActive(state == GameState.Title);
+        drawState.SetActive(state == GameState.Draw);
+        orderState.SetActive(state == GameState.Order);
 
         if (state == GameState.Intro)
         {
             introTimer = introDuration;
-        }
-        else if (state == GameState.PlayerSwitch)
-        {
-            if (playerSwitchText != null)
-                playerSwitchText.text = currentPlayer == 1 ? "Player 1 - Draw" : "Player 2 - Draw";
         }
         else if (state == GameState.Draw)
         {

@@ -3,39 +3,33 @@ using UnityEngine;
 
 public class TransitionController : MonoBehaviour
 {
-    [SerializeField] private float transitionDuration = 1f;
-    [SerializeField] private float middleTimeNormalized = 0.5f;
+    public event Action TransitionOnClosed;
+    public event Action TransitionOnOpen;
 
-    public event Action TransitionStarted;
-    public event Action TransitionMiddleReached;
-    public event Action TransitionCompleted;
+    Animator animator;
 
-    private bool isRunning;
-    private float t;
-
-    public void Play()
+    void Awake()
     {
-        if (isRunning) return;
-        isRunning = true;
-        t = 0f;
-        TransitionStarted?.Invoke();
+        animator = GetComponentInChildren<Animator>();
     }
 
-    void Update()
+    public void OnClosed()
     {
-        if (!isRunning) return;
-        t += Time.unscaledDeltaTime;
-        if (t >= transitionDuration * middleTimeNormalized && TransitionMiddleReached != null)
-        {
-            Debug.Log("Transition Middle Reached");
-            TransitionMiddleReached?.Invoke();
-            TransitionMiddleReached = null; // one-shot per play
-        }
-        if (t >= transitionDuration)
-        {
-            isRunning = false;
-            TransitionCompleted?.Invoke();
-            Debug.Log("Transition Completed");
-        }
+        TransitionOnClosed?.Invoke();
+    }
+
+    public void OnOpen()
+    {
+        TransitionOnOpen?.Invoke();
+    }
+
+    public void Close()
+    {
+        animator.SetTrigger("Close");
+    }
+
+    public void Open()
+    {
+        animator.SetTrigger("Open");
     }
 }
