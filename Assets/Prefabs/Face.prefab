@@ -461,7 +461,7 @@ GameObject:
   - component: {fileID: 5951013811599737449}
   - component: {fileID: 3222420197750186560}
   m_Layer: 5
-  m_Name: Face 1
+  m_Name: Face
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -516,15 +516,15 @@ MonoBehaviour:
   selectedMoustache: {fileID: 0}
   selectedEyebrows: {fileID: 0}
   selectedNose: {fileID: 0}
-  eyesRenderer: {fileID: 0}
-  mouthRenderer: {fileID: 0}
-  earsRenderer: {fileID: 0}
-  hairRenderer: {fileID: 0}
-  accessoryRenderer: {fileID: 0}
-  beardRenderer: {fileID: 0}
-  moustacheRenderer: {fileID: 0}
-  eyebrowsRenderer: {fileID: 0}
-  noseRenderer: {fileID: 0}
+  eyesRenderer: {fileID: 1919411357282073582}
+  mouthRenderer: {fileID: 7069531089558669758}
+  earsRenderer: {fileID: 6812466811022255760}
+  hairRenderer: {fileID: 3246415967147900704}
+  accessoryRenderer: {fileID: 6805917947849506315}
+  beardRenderer: {fileID: 7590759402684636587}
+  moustacheRenderer: {fileID: 7215042079428433514}
+  eyebrowsRenderer: {fileID: 850741850861871847}
+  noseRenderer: {fileID: 6937918323093834590}
   faceSeed: 0
   generate: 0
 --- !u!1 &5164956218763881096

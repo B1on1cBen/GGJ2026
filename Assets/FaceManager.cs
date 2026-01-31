@@ -41,13 +41,12 @@ public class FaceManager : MonoBehaviour
     [SerializeField] private int faceSeed;
     public int FaceSeed => faceSeed;
 
-    static bool loaded = false;
+    static bool init = false;
     [SerializeField] bool generate;
 
     void Awake()
     {
-        EnsureFacePartsLoaded();
-        ResolveRenderers();
+        Init();
 
         if (generate)
         {
@@ -65,10 +64,10 @@ public class FaceManager : MonoBehaviour
     }
 #endif
 
-    void EnsureFacePartsLoaded()
+    void Init()
     {
-        if (loaded) return;
-        loaded = true;
+        if (init) return;
+        init = true;
 
         eyes = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Eyes"));
         mouths = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Mouth"));
@@ -81,19 +80,6 @@ public class FaceManager : MonoBehaviour
         noses = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Nose"));
     }
 
-    void ResolveRenderers()
-    {
-        eyesRenderer = FindImageByName("Eyes");
-        mouthRenderer = FindImageByName("Mouth");
-        earsRenderer = FindImageByName("Ears");
-        hairRenderer = FindImageByName("Hair");
-        accessoryRenderer = FindImageByName("Accessories");
-        beardRenderer = FindImageByName("Beard");
-        moustacheRenderer = FindImageByName("Moustache");
-        eyebrowsRenderer = FindImageByName("Eyebrows");
-        noseRenderer = FindImageByName("Nose");
-    }
-
     Image FindImageByName(string objectName)
     {
         var go = GameObject.Find(objectName);
@@ -102,7 +88,7 @@ public class FaceManager : MonoBehaviour
 
     public void GenerateFace(int? seed)
     {
-        EnsureFacePartsLoaded();
+        Init();
 
         //var previousState = Random.state;
         if (seed.HasValue)

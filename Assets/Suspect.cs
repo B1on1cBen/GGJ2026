@@ -22,6 +22,19 @@ public class Suspect : MonoBehaviour
         GenerateSuspect(null);
     }
 
+    #if UNITY_EDITOR
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (bodySprites.Count > 0 && bodySprite != null)
+            {
+                bodySprite.sprite = bodySprites[Random.Range(0, bodySprites.Count)];
+            }
+        }
+    }
+    #endif
+
     public void GenerateSuspect(int? seed)
     {
         EnsureBodiesLoaded();
