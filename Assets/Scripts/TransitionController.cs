@@ -27,6 +27,7 @@ public class TransitionController : MonoBehaviour
         t += Time.unscaledDeltaTime;
         if (t >= transitionDuration * middleTimeNormalized && TransitionMiddleReached != null)
         {
+            Debug.Log("Transition Middle Reached");
             TransitionMiddleReached?.Invoke();
             TransitionMiddleReached = null; // one-shot per play
         }
@@ -34,6 +35,7 @@ public class TransitionController : MonoBehaviour
         {
             isRunning = false;
             TransitionCompleted?.Invoke();
+            Debug.Log("Transition Completed");
         }
     }
 }

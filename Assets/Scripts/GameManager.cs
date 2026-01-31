@@ -5,11 +5,11 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private FaceManager suspectPortrait;
     [SerializeField] private Suspect[] suspects;
+    [SerializeField] private SketchSystem sketchSystem;
 
     [Header("State GameObjects")]
     [SerializeField] private GameObject introState;
     [SerializeField] private GameObject titleState;
-    [SerializeField] private GameObject playerSwitchState;
     [SerializeField] private GameObject drawState;
     [SerializeField] private GameObject orderState;
     [SerializeField] private GameObject transitionState;
@@ -42,22 +42,10 @@ public class GameManager : MonoBehaviour
         SetStateImmediate(GameState.Intro);
     }
 
-    void OnEnable()
+    void Start()
     {
-        if (transitionController != null)
-        {
-            transitionController.TransitionMiddleReached += OnTransitionMiddle;
-            transitionController.TransitionCompleted += OnTransitionComplete;
-        }
-    }
-
-    void OnDisable()
-    {
-        if (transitionController != null)
-        {
-            transitionController.TransitionMiddleReached -= OnTransitionMiddle;
-            transitionController.TransitionCompleted -= OnTransitionComplete;
-        }
+        transitionController.TransitionMiddleReached += OnTransitionMiddle;
+        transitionController.TransitionCompleted += OnTransitionComplete;
     }
 
 #if UNITY_EDITOR
@@ -83,6 +71,7 @@ public class GameManager : MonoBehaviour
         else if (currentState == GameState.PlayerSwitch && Input.anyKeyDown)
         {
             RequestStateChange(GameState.Draw);
+            sketchSystem.drawingEnabled = true;
         }
     }
 #endif
@@ -96,6 +85,7 @@ public class GameManager : MonoBehaviour
 
         if (drawTimer <= 0f)
         {
+            sketchSystem.drawingEnabled = false;
             RequestStateChange(GameState.Order);
         }
     }
@@ -145,11 +135,13 @@ public class GameManager : MonoBehaviour
 
     private void OnTransitionMiddle()
     {
+        Debug.Log("OnTransitionMiddle: " + pendingState);
         SetStateImmediate(pendingState);
     }
 
     private void OnTransitionComplete()
     {
+        Debug.Log("OnTransitionComplete: ");
         inputLocked = false;
     }
 
@@ -159,7 +151,6 @@ public class GameManager : MonoBehaviour
 
         if (introState) introState.SetActive(state == GameState.Intro);
         if (titleState) titleState.SetActive(state == GameState.Title);
-        if (playerSwitchState) playerSwitchState.SetActive(state == GameState.PlayerSwitch);
         if (drawState) drawState.SetActive(state == GameState.Draw);
         if (orderState) orderState.SetActive(state == GameState.Order);
         if (transitionState) transitionState.SetActive(state == GameState.Transition);
