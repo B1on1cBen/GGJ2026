@@ -1,10 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SketchSystem : MonoBehaviour
+public class DrawPhase : GamePhase
 {
     [Header("Drawing Area (Image RectTransform)")]
     [SerializeField] private RectTransform drawArea;
@@ -18,30 +17,57 @@ public class SketchSystem : MonoBehaviour
     [SerializeField] private float worldZ = 0f;
 
     private bool isDrawing;
-    private readonly List<Vector3> points = new List<Vector3>();
+    private List<Vector3> currentPoints = new List<Vector3>();
+    private readonly List<List<Vector3>> allPoints = new List<List<Vector3>>();
+    private readonly List<LineRenderer> allLineRenderers = new List<LineRenderer>();
     private LineRenderer currentLineRenderer;
 
     public bool drawingEnabled;
 
-    // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
+        active = true;
+
         if (uiCamera == null)
         {
             uiCamera = Camera.main;
         }
 
+        foreach (var lr in allLineRenderers)
+        {
+            if (lr == null) continue;
+            if (lr != lineRenderer)
+            {
+                Destroy(lr.gameObject);
+            }
+            else
+            {
+                lr.positionCount = 0;
+            }
+        }
+        allLineRenderers.Clear();
+        allPoints.Clear();
+        currentPoints.Clear();
+
+        lineRenderer.gameObject.SetActive(true);
         currentLineRenderer = lineRenderer;
         if (currentLineRenderer != null)
         {
             currentLineRenderer.positionCount = 0;
         }
+
+        drawingEnabled = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnDisable()
     {
-        if (!drawingEnabled)
+        active = false;
+        drawingEnabled = false;
+    }
+
+    protected override void UpdatePhase()
+    {
+        if (!drawingEnabled || GameManager.inputLocked)
             return;
 
         Vector2 mousePos = Input.mousePosition;
@@ -49,19 +75,26 @@ public class SketchSystem : MonoBehaviour
 
         if (debugText != null)  
         {
-            debugText.text = $"Mouse Pos: {mousePos}\nInside Draw Area: {inside}\nPoints Count: {points.Count}";
+            debugText.text = $"Mouse Pos: {mousePos}\nInside Draw Area: {inside}\nPoints Count: {currentPoints.Count}";
         }
 
         if (Input.GetMouseButtonDown(0) && inside)
         {
             isDrawing = true;
-            points.Clear();
+            currentPoints = new List<Vector3>();
+            allPoints.Add(currentPoints);
+
             currentLineRenderer = lineRendererPrefab != null
                 ? Instantiate(lineRendererPrefab, lineRenderer.transform.parent)
                 : lineRenderer;
+
+            if (currentLineRenderer != null && !allLineRenderers.Contains(currentLineRenderer))
+            {
+                allLineRenderers.Add(currentLineRenderer);
+            }
+
             currentLineRenderer.positionCount = 0;
             AddPoint(mousePos);
-
         }
         else if (Input.GetMouseButton(0) && isDrawing)
         {
@@ -80,15 +113,15 @@ public class SketchSystem : MonoBehaviour
     private void AddPoint(Vector2 screenPos)
     {
         Vector3 world = uiCamera.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, Mathf.Abs(uiCamera.transform.position.z) + worldZ));
-        if (points.Count > 0 && Vector3.Distance(points[points.Count - 1], world) < minPointDistance)
+        if (currentPoints.Count > 0 && Vector3.Distance(currentPoints[currentPoints.Count - 1], world) < minPointDistance)
         {
             return;
         }
 
-        points.Add(world);
+        currentPoints.Add(world);
         if (currentLineRenderer == null) return;
-        currentLineRenderer.positionCount = points.Count;
-        currentLineRenderer.SetPosition(points.Count - 1, world);
+        currentLineRenderer.positionCount = currentPoints.Count;
+        currentLineRenderer.SetPosition(currentPoints.Count - 1, world);
     }
 
     public bool IsMouseOver(Image targetImage)
