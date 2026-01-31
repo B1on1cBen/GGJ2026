@@ -248,6 +248,7 @@ MonoBehaviour:
   lineRendererPrefab: {fileID: 2043235826}
   minPointDistance: 0.01
   worldZ: 0
+  drawingEnabled: 0
 --- !u!1001 &345610330
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1694,7 +1695,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1421835943
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2659,6 +2660,7 @@ MonoBehaviour:
   - {fileID: 345610332}
   - {fileID: 1924103423}
   - {fileID: 1316695965282567319}
+  sketchSystem: {fileID: 136889802}
   introState: {fileID: 638865572}
   titleState: {fileID: 2061645758}
   playerSwitchState: {fileID: 1817628026}

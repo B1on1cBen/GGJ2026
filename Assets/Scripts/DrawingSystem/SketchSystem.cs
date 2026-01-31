@@ -21,6 +21,8 @@ public class SketchSystem : MonoBehaviour
     private readonly List<Vector3> points = new List<Vector3>();
     private LineRenderer currentLineRenderer;
 
+    public bool drawingEnabled;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,10 +41,8 @@ public class SketchSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (currentLineRenderer == null || drawArea == null || uiCamera == null)
-        {
+        if (!drawingEnabled)
             return;
-        }
 
         Vector2 mousePos = Input.mousePosition;
         bool inside = IsMouseOver(drawArea.GetComponent<Image>());
