@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private FaceManager suspectPortrait;
     [SerializeField] private Suspect[] suspects;
     [SerializeField] private DrawPhase sketchSystem;
+    [SerializeField] private OrderPhase orderSystem;
 
     [Header("State GameObjects")]
     [SerializeField] private GameObject introState;
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour
     private int currentRound = 1;
     private float drawTimer;
     private float introTimer;
+    private bool drawTimeOver = false;
 
     void Awake()
     {
@@ -50,13 +52,16 @@ public class GameManager : MonoBehaviour
         transitionController.TransitionOnOpen += OnTransitionOpen;
     }
 
-#if UNITY_EDITOR
     void Update()
     {
+        
+        #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.R))
             GenerateSuspectsWithPortraitSeed();
+        #endif
 
-        if (inputLocked) return;
+        if (inputLocked) 
+            return;
 
         if (currentState == GameState.Intro)
         {
@@ -70,17 +75,20 @@ public class GameManager : MonoBehaviour
             RequestStateChange(GameState.Draw);
         }
     }
-#endif
+
 
     void UpdateDrawTimer()
     {
-        if (currentState != GameState.Draw) return;
+        if (currentState != GameState.Draw) 
+            return;
+
         drawTimer -= Time.deltaTime;
         if (timerText != null)
             timerText.text = Mathf.CeilToInt(drawTimer).ToString();
 
-        if (drawTimer <= 0f)
+        if (drawTimer <= 0f && !drawTimeOver)
         {
+            drawTimeOver = true;
             sketchSystem.active = false;
             RequestStateChange(GameState.Order);
         }
@@ -127,6 +135,8 @@ public class GameManager : MonoBehaviour
     public void OnContinueButtonPressed()
     {
         continueButton.SetActive(false);
+        player1Text.SetActive(false);
+        player2Text.SetActive(false);
         transitionController.Open();
     }
 
@@ -137,7 +147,12 @@ public class GameManager : MonoBehaviour
         if (currentState == GameState.Draw)
             sketchSystem.gameObject.SetActive(true);
 
+        if (currentState == GameState.Order)
+            orderState.SetActive(true);
+
         continueButton.SetActive(true);
+        player1Text.SetActive(currentPlayer == 1);
+        player2Text.SetActive(currentPlayer == 2);
     }
 
     private void OnTransitionOpen()
@@ -148,6 +163,9 @@ public class GameManager : MonoBehaviour
 
         if (currentState == GameState.Draw)
             sketchSystem.active = true;
+
+        if (currentState == GameState.Order)
+            orderSystem.active = true;
     }
 
     private void SetStateImmediate(GameState state)
