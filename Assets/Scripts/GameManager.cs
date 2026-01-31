@@ -91,6 +91,7 @@ public class GameManager : MonoBehaviour
         if (drawTimer <= 0f && !drawTimeOver)
         {
             drawTimeOver = true;
+            sketchSystem.Clear();
             sketchSystem.active = false;
             sketchCamera.enabled = false;
             RequestStateChange(GameState.Order);
