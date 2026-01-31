@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Suspect[] suspects;
     [SerializeField] private DrawPhase sketchSystem;
     [SerializeField] private OrderPhase orderSystem;
+    [SerializeField] private Camera sketchCamera;
 
     [Header("State GameObjects")]
     [SerializeField] private GameObject introState;
@@ -72,6 +73,7 @@ public class GameManager : MonoBehaviour
         }
         if (currentState == GameState.Title && Input.anyKeyDown)
         {
+            sketchCamera.enabled = true;
             RequestStateChange(GameState.Draw);
         }
     }
@@ -90,6 +92,7 @@ public class GameManager : MonoBehaviour
         {
             drawTimeOver = true;
             sketchSystem.active = false;
+            sketchCamera.enabled = false;
             RequestStateChange(GameState.Order);
         }
     }

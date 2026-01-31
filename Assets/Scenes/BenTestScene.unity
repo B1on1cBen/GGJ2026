@@ -2084,7 +2084,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1138499947}
   - component: {fileID: 1138499946}
-  - component: {fileID: 1138499945}
   m_Layer: 0
   m_Name: DrawingCamera
   m_TagString: Untagged
@@ -2092,14 +2091,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1138499945
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1138499944}
-  m_Enabled: 1
 --- !u!20 &1138499946
 Camera:
   m_ObjectHideFlags: 0
@@ -2186,6 +2177,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1421835943}
+  - component: {fileID: 1421835944}
   m_Layer: 5
   m_Name: OrderPhase
   m_TagString: Untagged
@@ -2218,6 +2210,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1421835944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421835942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fffac5e1674011f49bca74b7f29e4b50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 0
 --- !u!1 &1532697589
 GameObject:
   m_ObjectHideFlags: 0
@@ -2974,7 +2979,8 @@ MonoBehaviour:
   - {fileID: 1924103423}
   - {fileID: 1316695965282567319}
   sketchSystem: {fileID: 1532697591}
-  orderSystem: {fileID: 0}
+  orderSystem: {fileID: 1421835944}
+  sketchCamera: {fileID: 1138499946}
   introState: {fileID: 638865572}
   titleState: {fileID: 2061645758}
   drawState: {fileID: 1532697589}
