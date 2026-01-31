@@ -297,6 +297,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 494786278898695691, guid: 9615fc1fc78af554b9c854a123407c45, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 494786278898695691, guid: 9615fc1fc78af554b9c854a123407c45, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
@@ -2653,6 +2657,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4490422712772458105, guid: 7c2af8771255b0243ab73ad1e4b63d4e, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4490422712772458105, guid: 7c2af8771255b0243ab73ad1e4b63d4e, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
@@ -3729,18 +3737,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3779178862542907910, guid: 9039851c9a432de45bbeda70e61fcbf2, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3779178862542907910, guid: 9039851c9a432de45bbeda70e61fcbf2, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3779178862542907910, guid: 9039851c9a432de45bbeda70e61fcbf2, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3779178862542907910, guid: 9039851c9a432de45bbeda70e61fcbf2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -3783,10 +3779,6 @@ PrefabInstance:
     - target: {fileID: 4466610949239187383, guid: 9039851c9a432de45bbeda70e61fcbf2, type: 3}
       propertyPath: m_Name
       value: LineRenderer
-      objectReference: {fileID: 0}
-    - target: {fileID: 4466610949239187383, guid: 9039851c9a432de45bbeda70e61fcbf2, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3896,8 +3888,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 1568078507}
-  - {fileID: 1920658298}
   - {fileID: 1985316739}
   - {fileID: 2053410380}
   - {fileID: 5045782834070477126}
   - {fileID: 1138499947}
+  - {fileID: 1920658298}

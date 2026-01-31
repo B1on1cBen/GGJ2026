@@ -37,6 +37,10 @@ public class DrawPhase : GamePhase
 
     void OnDisable()
     {
+    }
+
+    public void Clear()
+    {
         foreach (var lr in allLineRenderers)
         {
             if (lr == null) continue;
