@@ -61,6 +61,7 @@ public class SketchSystem : MonoBehaviour
                 : lineRenderer;
             currentLineRenderer.positionCount = 0;
             AddPoint(mousePos);
+
         }
         else if (Input.GetMouseButton(0) && isDrawing)
         {
