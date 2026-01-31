@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
 
     void UpdateDrawTimer()
     {
-        if (currentState != GameState.Draw) 
+        if (currentState != GameState.Draw || !sketchSystem.active) 
             return;
 
         drawTimer -= Time.deltaTime;
