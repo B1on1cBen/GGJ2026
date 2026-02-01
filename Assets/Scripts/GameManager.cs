@@ -55,11 +55,17 @@ public class GameManager : MonoBehaviour
     {
         transitionController.TransitionOnClosed += OnTransitionClosed;
         transitionController.TransitionOnOpen += OnTransitionOpen;
+        orderSystem.OrderPhaseEnded += OnOrderPhaseEnded;
+    }
+
+    private void OnOrderPhaseEnded()
+    {
+        // Go back to draw phase
+        RequestStateChange(GameState.Draw);
     }
 
     void Update()
     {
-        
         #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.R))
             GenerateSuspectsWithPortraitSeed();
@@ -123,7 +129,7 @@ public class GameManager : MonoBehaviour
     public void OnOrderChoiceMade()
     {
         // stub event; hook from UI later
-        AdvanceRoundAndPlayer();
+        AdvanceRound();
         RequestStateChange(GameState.Transition);
     }
 
@@ -220,6 +226,9 @@ public class GameManager : MonoBehaviour
         }
         else if (state == GameState.Draw)
         {
+            sketchCamera.enabled = true;
+            drawTimeOver = false;
+
             GenerateSuspectsWithPortraitSeed();
             drawTimer = Mathf.Max(minDrawTime, baseDrawTime - drawTimeDecreasePerRound * (currentRound - 1));
             if (timerText != null)
@@ -227,9 +236,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void AdvanceRoundAndPlayer()
+    private void AdvanceRound()
     {
-        currentPlayer = currentPlayer == 1 ? 2 : 1;
-        if (currentPlayer == 1) currentRound += 1;
+        currentRound += 1;
     }
 }

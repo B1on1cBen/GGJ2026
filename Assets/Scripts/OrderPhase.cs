@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 public class OrderPhase : GamePhase
 {
@@ -24,6 +25,9 @@ public class OrderPhase : GamePhase
     [SerializeField] private AudioClip booSound;
     [SerializeField] private AudioClip cheerSound;
     [SerializeField] private AudioClip youChoseSound;
+    [SerializeField] private GameObject continueButton;
+
+    public event Action OrderPhaseEnded;
 
     private AudioSource audioSource;
     
@@ -175,15 +179,26 @@ public class OrderPhase : GamePhase
                 {
                     Debug.Log("BOOOOO!");
                     audioSource.PlayOneShot(booSound);
-                    _selectedSuspect.Dance();
+                    gameManager.suspects[gameManager.correctSuspectIndex].Dance();
                 }
-                if (sketch != null)
-                {
-                    sketch.SetActive(true);
-                }
+                sketch.SetActive(true);
+                _endSequenceStep++;
+                break;
+            case 4:
+                if (_endSequenceTimer < 2f)
+                    return;
+
+                continueButton.SetActive(true);
                 _endSequenceActive = false;
                 break;
         }
+    }
+
+    public void OnContinue()
+    {
+        sketch.SetActive(false);
+        continueButton.SetActive(false);
+        OrderPhaseEnded?.Invoke();
     }
 
     private void UpdateHover()
