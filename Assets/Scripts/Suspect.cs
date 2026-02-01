@@ -20,7 +20,6 @@ public class Suspect : MonoBehaviour
     void Awake()
     {
         EnsureBodiesLoaded();
-        //GenerateSuspect(null);
     }
 
     public void Dance()
