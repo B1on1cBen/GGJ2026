@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject drawStickyNote;
     [SerializeField] private TextMeshProUGUI phaseText;
     [SerializeField] private GameObject gameOverText;
+    [SerializeField] private Animator timerAnimator;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI timerText;
@@ -43,6 +44,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioClip introClip;
     [SerializeField] private AudioClip curtainCloseClip;
     [SerializeField] private AudioClip curtainOpenClip;
+    [SerializeField] private AudioClip timerClip;
+    [SerializeField] private AudioClip hurryUpClip;
 
     private enum GameState { Intro, Title, Draw, Order, Transition }
     private GameState currentState = GameState.Intro;
@@ -57,6 +60,8 @@ public class GameManager : MonoBehaviour
     private bool drawTimeOver = false;
     private int introDelayMs;
     private bool introClipFinished;
+    private bool timerClipPlayedThisDraw;
+    private bool hurryUpClipPlayedThisDraw;
 
     public int correctSuspectIndex = -1;
 
@@ -137,6 +142,20 @@ public class GameManager : MonoBehaviour
             return;
 
         drawTimer -= Time.deltaTime;
+
+        if (!timerClipPlayedThisDraw && timerClip != null && audioSource != null && drawTimer <= timerClip.length)
+        {
+            timerClipPlayedThisDraw = true;
+            audioSource.PlayOneShot(timerClip);
+            timerAnimator.SetTrigger("Ring");
+        }
+
+        if (!hurryUpClipPlayedThisDraw && hurryUpClip != null && audioSource != null && drawTimer <= 5f)
+        {
+            hurryUpClipPlayedThisDraw = true;
+            audioSource.PlayOneShot(hurryUpClip);
+        }
+
         if (timerText != null)
             timerText.text = FormatTime(drawTimer);
 
@@ -146,6 +165,7 @@ public class GameManager : MonoBehaviour
             sketchSystem.Clear();
             sketchSystem.active = false;
             sketchCamera.enabled = false;
+            timerAnimator.SetTrigger("Idle");
             RequestStateChange(GameState.Order);
         }
     }
@@ -303,6 +323,10 @@ public class GameManager : MonoBehaviour
         {
             sketchCamera.enabled = true;
             drawTimeOver = false;
+            timerClipPlayedThisDraw = false;
+            hurryUpClipPlayedThisDraw = false;
+            if (timerAnimator != null)
+                timerAnimator.SetTrigger("Idle");
 
             GenerateSuspectsWithPortraitSeed();
             drawTimer = Mathf.Max(minDrawTime, baseDrawTime - drawTimeDecreasePerRound * (currentRound - 1));

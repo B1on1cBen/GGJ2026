@@ -1032,6 +1032,7 @@ GameObject:
   - component: {fileID: 362586515}
   - component: {fileID: 362586517}
   - component: {fileID: 362586516}
+  - component: {fileID: 362586518}
   m_Layer: 5
   m_Name: Timer
   m_TagString: Untagged
@@ -1098,6 +1099,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 362586514}
   m_CullTransparentMesh: 1
+--- !u!95 &362586518
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 362586514}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ecfa03618dd3354478cdb95d7784ff89, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &367968069
 GameObject:
   m_ObjectHideFlags: 0
@@ -2165,7 +2187,7 @@ GameObject:
   - component: {fileID: 652247351}
   - component: {fileID: 652247352}
   m_Layer: 0
-  m_Name: TimeClock_RingerA
+  m_Name: Bell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3179,8 +3201,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0:30
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8a4977a6dacbf5c41bed4a2047faaddb, type: 2}
-  m_sharedMaterial: {fileID: -2445140172891737846, guid: 8a4977a6dacbf5c41bed4a2047faaddb, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b4a77237336b3c240a2379f843f34e5f, type: 2}
+  m_sharedMaterial: {fileID: 4127165682528815604, guid: b4a77237336b3c240a2379f843f34e5f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3204,7 +3226,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
+  m_fontSize: 68.7
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3240,7 +3262,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 65.593445, z: 0, w: 33.72058}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -6172,6 +6194,7 @@ MonoBehaviour:
   drawStickyNote: {fileID: 1635356358}
   phaseText: {fileID: 1345498064}
   gameOverText: {fileID: 1617332650}
+  timerAnimator: {fileID: 362586518}
   timerText: {fileID: 961516740}
   transitionController: {fileID: 620689109}
   baseDrawTime: 30
@@ -6198,6 +6221,8 @@ MonoBehaviour:
   introClip: {fileID: 8300000, guid: 7141daea71234a04cbdd97afcb4e2326, type: 3}
   curtainCloseClip: {fileID: 8300000, guid: a407c14c446b04040beca474a288d620, type: 3}
   curtainOpenClip: {fileID: 8300000, guid: 0e457b64cce66f14b848c7d19a214bfc, type: 3}
+  timerClip: {fileID: 8300000, guid: c0328347d9ef35e439589230e4b4b4e2, type: 3}
+  hurryUpClip: {fileID: 8300000, guid: 789350767b9cba646a10c141c868c1ae, type: 3}
   correctSuspectIndex: -1
 --- !u!82 &2053410382
 AudioSource:
