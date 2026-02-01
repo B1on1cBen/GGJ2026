@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class Suspect : MonoBehaviour
 {
     [SerializeField] private Image bodySprite;
+    [SerializeField] private GameObject dance;
 
     private static List<Sprite> bodySprites = new List<Sprite>();
     private static bool bodiesLoaded;
@@ -20,6 +21,12 @@ public class Suspect : MonoBehaviour
     {
         EnsureBodiesLoaded();
         //GenerateSuspect(null);
+    }
+
+    public void Dance()
+    {
+        bodySprite.gameObject.SetActive(false);
+        dance.SetActive(true);
     }
 
     public void GenerateSuspect(int? seed)

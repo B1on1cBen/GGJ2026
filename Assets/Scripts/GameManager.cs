@@ -4,7 +4,7 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private FaceManager suspectPortrait;
-    [SerializeField] private Suspect[] suspects;
+    [SerializeField] public Suspect[] suspects;
     [SerializeField] private DrawPhase sketchSystem;
     [SerializeField] private OrderPhase orderSystem;
     [SerializeField] private Camera sketchCamera;
@@ -41,6 +41,8 @@ public class GameManager : MonoBehaviour
     private float drawTimer;
     private float introTimer;
     private bool drawTimeOver = false;
+
+    public int correctSuspectIndex = -1;
 
     void Awake()
     {
@@ -119,12 +121,12 @@ public class GameManager : MonoBehaviour
 
         if (suspects == null || suspects.Length == 0) return;
 
-        var seededIndex = Random.Range(0, suspects.Length);
+        correctSuspectIndex = Random.Range(0, suspects.Length);
         for (int i = 0; i < suspects.Length; i++)
         {
             var s = suspects[i];
             if (s == null) continue;
-            s.GenerateSuspect(i == seededIndex ? seed : (int?)null);
+            s.GenerateSuspect(i == correctSuspectIndex ? seed : (int?)null);
         }
     }
 

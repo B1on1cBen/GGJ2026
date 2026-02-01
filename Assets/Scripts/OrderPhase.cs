@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
+using System.Collections;
 
 public class OrderPhase : GamePhase
 {
@@ -14,16 +16,34 @@ public class OrderPhase : GamePhase
     [SerializeField] private CrusherAnimRelay crusher;
     [SerializeField] private AudioClip spotlightSound;
     [SerializeField] private GameObject spotlightEffect;
+    [SerializeField] private GameObject sketch;
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private GameObject youChoseUI;
+    [SerializeField] private GameObject correctUI;
+    [SerializeField] private GameObject poorlyUI;
+    [SerializeField] private AudioClip correctSound;
+    [SerializeField] private AudioClip poorlySound;
+    [SerializeField] private AudioClip booSound;
+    [SerializeField] private AudioClip cheerSound;
+    [SerializeField] private AudioClip youChoseSound;
 
+    private AudioSource audioSource;
+    
     private Suspect _hoveredSuspect;
     private Shaker hoveredSuspectShaker;
     private Suspect _selectedSuspect;
     private RectTransform _hoveredSuspectRectTransform;
     private readonly List<RaycastResult> _uiHits = new List<RaycastResult>();
     private PointerEventData _pointerEventData;
+    private Coroutine _endRoutine;
+
+    bool correctChosen = false;
 
     void Awake()
     {
+        gameManager = FindObjectOfType<GameManager>();
+        audioSource = Camera.main.GetComponent<AudioSource>();
+
         crusher.OnCrusherBonkEvent += () =>
         {
             if (_selectedSuspect != null)
@@ -31,6 +51,8 @@ public class OrderPhase : GamePhase
                 _selectedSuspect.gameObject.SetActive(false);
             }
         };
+        
+        crusher.OnCrusherEndedEvent += OnCrusherEnded;
     }
 
     void OnDisable()
@@ -56,14 +78,91 @@ public class OrderPhase : GamePhase
         if (Input.GetMouseButtonDown(0) && _hoveredSuspect != null)
         {
             _selectedSuspect = _hoveredSuspect;
-            if (crusher != null)
-            {
-                var pos = crusher.transform.position;
-                crusher.transform.position = new Vector3(_selectedSuspect.transform.position.x, pos.y, pos.z);
-                crusher.Crush();
-            }
-            // TODO: handle selection logic
-            Debug.Log("Selected suspect: " + _selectedSuspect.name);
+            var spotPos = spotlightEffect.transform.position;
+            spotlightEffect.GetComponent<Image>().enabled = true;
+            spotlightEffect.transform.position = new Vector3(_hoveredSuspect.transform.position.x, spotPos.y, spotPos.z);
+            audioSource.PlayOneShot(spotlightSound);
+
+            sketch.SetActive(false);
+
+            Invoke("Crush", 2);
+        }
+    }
+
+    private void Crush()
+    {
+        if (crusher != null)
+        {
+            var pos = crusher.transform.position;
+            crusher.transform.position = new Vector3(_selectedSuspect.transform.position.x, pos.y, pos.z);
+            crusher.Crush();
+        }
+    }
+    
+    private void OnCrusherEnded()
+    {
+        if (_endRoutine != null) { StopCoroutine(_endRoutine); }
+        _endRoutine = StartCoroutine(EndRevealSequence());
+    }
+
+    private IEnumerator EndRevealSequence()
+    {
+        // Pause
+        yield return new WaitForSeconds(2f);
+
+        // Game show reveal "You Chose..."
+        audioSource.PlayOneShot(youChoseSound);
+        youChoseUI.SetActive(true);
+
+        yield return new WaitForSeconds(2f);
+
+        // Move Spotlight to correct suspect (placeholder: keep current)
+        // TODO: swap to correct suspect when available
+        if (spotlightEffect != null)
+        {
+            var spotPos = spotlightEffect.transform.position;
+            var correctSuspect = gameManager.suspects[gameManager.correctSuspectIndex];
+            spotlightEffect.transform.position = new Vector3(correctSuspect.transform.position.x, spotPos.y, spotPos.z);
+            audioSource.PlayOneShot(spotlightSound);
+        }
+
+        yield return new WaitForSeconds(2f);
+
+        // "Correctly! / Poorly!"
+        // TODO: hook up UI feedback
+        correctChosen = _selectedSuspect == gameManager.suspects[gameManager.correctSuspectIndex];
+
+        if (correctChosen)
+        {
+            correctUI.SetActive(true);
+            audioSource.PlayOneShot(correctSound);
+        }
+        else
+        {
+            poorlyUI.SetActive(true);
+            audioSource.PlayOneShot(poorlySound);
+        }
+
+        yield return new WaitForSeconds(2f);
+
+        // Bad guy does dance + boo / cheer
+        // TODO: trigger animations/audio
+        if (correctChosen)
+        {
+            audioSource.PlayOneShot(cheerSound);
+        }
+        else
+        {
+            audioSource.PlayOneShot(booSound);
+            _selectedSuspect.Dance();
+        }
+
+        // Newspaper report if wrong
+        // TODO: show report UI
+
+        if (sketch != null)
+        {
+            sketch.SetActive(true);
         }
     }
 
