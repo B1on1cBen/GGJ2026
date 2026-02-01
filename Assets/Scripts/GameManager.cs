@@ -170,8 +170,10 @@ public class GameManager : MonoBehaviour
         if (currentState == GameState.Draw)
             sketchSystem.active = true;
 
-        if (currentState == GameState.Order)
+        if (currentState == GameState.Order){
             orderSystem.active = true;
+            Debug.Log("WHAT");
+        }
     }
 
     private void SetStateImmediate(GameState state)

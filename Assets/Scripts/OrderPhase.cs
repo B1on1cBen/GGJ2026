@@ -2,8 +2,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using System;
-using System.Collections;
 
 public class OrderPhase : GamePhase
 {
@@ -37,10 +35,7 @@ public class OrderPhase : GamePhase
     private PointerEventData _pointerEventData;
 
     bool correctChosen = false;
-
     bool selected = false;
-
-    float timeOrderStart = 0f;
 
     private bool _endSequenceActive;
     private float _endSequenceTimer;
@@ -60,11 +55,6 @@ public class OrderPhase : GamePhase
         };
         
         crusher.OnCrusherEndedEvent += OnCrusherEnded;
-    }
-
-    void OnEnable()
-    {
-        timeOrderStart = Time.time;
     }
 
     void OnDisable()
@@ -88,10 +78,11 @@ public class OrderPhase : GamePhase
         UpdateHover();
         TickEndRevealSequence(Time.deltaTime);
 
-        if (!selected && Input.GetMouseButtonDown(0) && Time.time - timeOrderStart > 2f && _hoveredSuspect != null)
+        if (!selected && Input.GetMouseButtonDown(0) && _hoveredSuspect != null)
         {
             selected = true;
             hoverArrow.gameObject.SetActive(false);
+            StopAllCoroutines();
 
             _selectedSuspect = _hoveredSuspect;
             var spotPos = spotlightEffect.transform.position;
@@ -191,6 +182,12 @@ public class OrderPhase : GamePhase
 
     private void UpdateHover()
     {
+        if (selected)
+        {
+            if (hoverArrow != null) { hoverArrow.gameObject.SetActive(false); }
+            return;
+        }
+
         if (uiRaycaster == null || eventSystem == null) { return; }
 
         if (_pointerEventData == null) { _pointerEventData = new PointerEventData(eventSystem); }
