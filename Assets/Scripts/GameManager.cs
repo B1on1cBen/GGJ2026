@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
     private bool introClipFinished;
     private bool timerClipPlayedThisDraw;
     private bool hurryUpClipPlayedThisDraw;
+    private bool pendingOrderAfterRing;
 
     public int correctSuspectIndex = -1;
 
@@ -148,6 +149,8 @@ public class GameManager : MonoBehaviour
             timerClipPlayedThisDraw = true;
             audioSource.PlayOneShot(timerClip);
             timerAnimator.SetTrigger("Ring");
+            pendingOrderAfterRing = true;
+            Invoke(nameof(TransitionToOrderAfterRing), timerClip.length);
         }
 
         if (!hurryUpClipPlayedThisDraw && hurryUpClip != null && audioSource != null && drawTimer <= 5f)
@@ -161,13 +164,28 @@ public class GameManager : MonoBehaviour
 
         if (drawTimer <= 0f && !drawTimeOver)
         {
-            drawTimeOver = true;
-            sketchSystem.Clear();
-            sketchSystem.active = false;
-            sketchCamera.enabled = false;
-            timerAnimator.SetTrigger("Idle");
-            RequestStateChange(GameState.Order);
+            ResetDraw();
+
+            if (!timerClipPlayedThisDraw && timerClip != null && audioSource != null)
+            {
+                timerClipPlayedThisDraw = true;
+                audioSource.PlayOneShot(timerClip);
+                timerAnimator.SetTrigger("Ring");
+                pendingOrderAfterRing = true;
+                Invoke(nameof(TransitionToOrderAfterRing), timerClip.length);
+            }
+            else
+            {
+                RequestStateChange(GameState.Order);
+            }
         }
+    }
+
+    private void TransitionToOrderAfterRing()
+    {
+        if (!pendingOrderAfterRing) return;
+        pendingOrderAfterRing = false;
+        RequestStateChange(GameState.Order);
     }
 
     private string FormatTime(float seconds)
@@ -183,13 +201,19 @@ public class GameManager : MonoBehaviour
         if (drawTimeOver)
             return;
 
+        ResetDraw();
+        RequestStateChange(GameState.Order);
+    }
+
+    private void ResetDraw()
+    {
         StopMusic();
         drawTimeOver = true;
         sketchSystem.Clear();
         sketchSystem.active = false;
         sketchCamera.enabled = false;
+        timerAnimator.SetTrigger("Idle");
         currentPlayer = currentPlayer == 1 ? 2 : 1;
-        RequestStateChange(GameState.Order);
     }
 
     void LateUpdate()
@@ -325,6 +349,7 @@ public class GameManager : MonoBehaviour
             drawTimeOver = false;
             timerClipPlayedThisDraw = false;
             hurryUpClipPlayedThisDraw = false;
+            pendingOrderAfterRing = false;
             if (timerAnimator != null)
                 timerAnimator.SetTrigger("Idle");
 
