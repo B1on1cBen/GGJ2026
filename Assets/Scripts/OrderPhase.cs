@@ -35,9 +35,16 @@ public class OrderPhase : GamePhase
     private RectTransform _hoveredSuspectRectTransform;
     private readonly List<RaycastResult> _uiHits = new List<RaycastResult>();
     private PointerEventData _pointerEventData;
-    private Coroutine _endRoutine;
 
     bool correctChosen = false;
+
+    bool selected = false;
+
+    float timeOrderStart = 0f;
+
+    private bool _endSequenceActive;
+    private float _endSequenceTimer;
+    private int _endSequenceStep;
 
     void Awake()
     {
@@ -53,6 +60,11 @@ public class OrderPhase : GamePhase
         };
         
         crusher.OnCrusherEndedEvent += OnCrusherEnded;
+    }
+
+    void OnEnable()
+    {
+        timeOrderStart = Time.time;
     }
 
     void OnDisable()
@@ -74,9 +86,13 @@ public class OrderPhase : GamePhase
     protected override void UpdatePhase()
     {
         UpdateHover();
+        TickEndRevealSequence(Time.deltaTime);
 
-        if (Input.GetMouseButtonDown(0) && _hoveredSuspect != null)
+        if (!selected && Input.GetMouseButtonDown(0) && Time.time - timeOrderStart > 2f && _hoveredSuspect != null)
         {
+            selected = true;
+            hoverArrow.gameObject.SetActive(false);
+
             _selectedSuspect = _hoveredSuspect;
             var spotPos = spotlightEffect.transform.position;
             spotlightEffect.GetComponent<Image>().enabled = true;
@@ -101,68 +117,75 @@ public class OrderPhase : GamePhase
     
     private void OnCrusherEnded()
     {
-        if (_endRoutine != null) { StopCoroutine(_endRoutine); }
-        _endRoutine = StartCoroutine(EndRevealSequence());
+        Debug.Log("OnCrusherEnded");
+        _endSequenceActive = true;
+        _endSequenceTimer = 0f;
+        _endSequenceStep = 0;
     }
 
-    private IEnumerator EndRevealSequence()
+    private void TickEndRevealSequence(float dt)
     {
-        // Pause
-        yield return new WaitForSeconds(2f);
+        if (!_endSequenceActive) { return; }
 
-        // Game show reveal "You Chose..."
-        audioSource.PlayOneShot(youChoseSound);
-        youChoseUI.SetActive(true);
+        _endSequenceTimer += dt;
 
-        yield return new WaitForSeconds(2f);
-
-        // Move Spotlight to correct suspect (placeholder: keep current)
-        // TODO: swap to correct suspect when available
-        if (spotlightEffect != null)
+        switch (_endSequenceStep)
         {
-            var spotPos = spotlightEffect.transform.position;
-            var correctSuspect = gameManager.suspects[gameManager.correctSuspectIndex];
-            spotlightEffect.transform.position = new Vector3(correctSuspect.transform.position.x, spotPos.y, spotPos.z);
-            audioSource.PlayOneShot(spotlightSound);
-        }
+            case 0:
+                if (_endSequenceTimer < 2f) { return; }
+                _endSequenceTimer = 0f;
+                audioSource.PlayOneShot(youChoseSound);
+                youChoseUI.SetActive(true);
+                _endSequenceStep++;
+                break;
 
-        yield return new WaitForSeconds(2f);
+            case 1:
+                if (_endSequenceTimer < 2f) { return; }
+                _endSequenceTimer = 0f;
+                if (spotlightEffect != null)
+                {
+                    var spotPos = spotlightEffect.transform.position;
+                    var correctSuspect = gameManager.suspects[gameManager.correctSuspectIndex];
+                    spotlightEffect.transform.position = new Vector3(correctSuspect.transform.position.x, spotPos.y, spotPos.z);
+                    audioSource.PlayOneShot(spotlightSound);
+                }
+                _endSequenceStep++;
+                break;
 
-        // "Correctly! / Poorly!"
-        // TODO: hook up UI feedback
-        correctChosen = _selectedSuspect == gameManager.suspects[gameManager.correctSuspectIndex];
+            case 2:
+                if (_endSequenceTimer < 2f) { return; }
+                _endSequenceTimer = 0f;
+                correctChosen = _selectedSuspect == gameManager.suspects[gameManager.correctSuspectIndex];
+                if (correctChosen)
+                {
+                    correctUI.SetActive(true);
+                    audioSource.PlayOneShot(correctSound);
+                }
+                else
+                {
+                    poorlyUI.SetActive(true);
+                    audioSource.PlayOneShot(poorlySound);
+                }
+                _endSequenceStep++;
+                break;
 
-        if (correctChosen)
-        {
-            correctUI.SetActive(true);
-            audioSource.PlayOneShot(correctSound);
-        }
-        else
-        {
-            poorlyUI.SetActive(true);
-            audioSource.PlayOneShot(poorlySound);
-        }
-
-        yield return new WaitForSeconds(2f);
-
-        // Bad guy does dance + boo / cheer
-        // TODO: trigger animations/audio
-        if (correctChosen)
-        {
-            audioSource.PlayOneShot(cheerSound);
-        }
-        else
-        {
-            audioSource.PlayOneShot(booSound);
-            _selectedSuspect.Dance();
-        }
-
-        // Newspaper report if wrong
-        // TODO: show report UI
-
-        if (sketch != null)
-        {
-            sketch.SetActive(true);
+            case 3:
+                if (_endSequenceTimer < 2f) { return; }
+                if (correctChosen)
+                {
+                    audioSource.PlayOneShot(cheerSound);
+                }
+                else
+                {
+                    audioSource.PlayOneShot(booSound);
+                    _selectedSuspect.Dance();
+                }
+                if (sketch != null)
+                {
+                    sketch.SetActive(true);
+                }
+                _endSequenceActive = false;
+                break;
         }
     }
 
