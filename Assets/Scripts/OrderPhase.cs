@@ -12,6 +12,8 @@ public class OrderPhase : GamePhase
     [SerializeField] private GraphicRaycaster uiRaycaster;
     [SerializeField] private EventSystem eventSystem;
     [SerializeField] private CrusherAnimRelay crusher;
+    [SerializeField] private AudioClip spotlightSound;
+    [SerializeField] private GameObject spotlightEffect;
 
     private Suspect _hoveredSuspect;
     private Shaker hoveredSuspectShaker;
@@ -30,7 +32,7 @@ public class OrderPhase : GamePhase
             }
         };
     }
-    
+
     void OnDisable()
     {
         if (hoverArrow != null)
