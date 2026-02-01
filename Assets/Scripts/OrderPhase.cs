@@ -19,7 +19,7 @@ public class OrderPhase : GamePhase
     [SerializeField] private GameManager gameManager;
     [SerializeField] private GameObject youChoseUI;
     [SerializeField] private GameObject correctUI;
-    [SerializeField] private GameObject poorlyUI;
+    public GameObject poorlyUI;
     [SerializeField] private AudioClip correctSound;
     [SerializeField] private AudioClip poorlySound;
     [SerializeField] private AudioClip booSound;

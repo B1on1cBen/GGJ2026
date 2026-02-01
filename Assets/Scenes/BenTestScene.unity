@@ -640,7 +640,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 191034172}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5352,8 +5352,8 @@ RectTransform:
   m_Children:
   - {fileID: 1421835943}
   - {fileID: 1532697590}
-  - {fileID: 2061645759}
   - {fileID: 638865573}
+  - {fileID: 2061645759}
   - {fileID: 191034173}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6521,6 +6521,8 @@ MonoBehaviour:
   phaseText: {fileID: 1345498064}
   gameOverText: {fileID: 1617332650}
   timer: {fileID: 362586518}
+  EndScreen: {fileID: 191034172}
+  CurtainCanvas: {fileID: 1920658294}
   timerText: {fileID: 961516740}
   transitionController: {fileID: 620689109}
   baseDrawTime: 30
@@ -6545,10 +6547,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d89478bd7be4f374ab76af7b50a8d547, type: 3}
   - {fileID: 8300000, guid: 87323f46060c10144ae0c0ab76a2317f, type: 3}
   introClip: {fileID: 8300000, guid: 7141daea71234a04cbdd97afcb4e2326, type: 3}
+  dundunClip: {fileID: 8300000, guid: d7bc8003393edb647b27a848e9837a8a, type: 3}
   curtainCloseClip: {fileID: 8300000, guid: a407c14c446b04040beca474a288d620, type: 3}
   curtainOpenClip: {fileID: 8300000, guid: 0e457b64cce66f14b848c7d19a214bfc, type: 3}
   timerClip: {fileID: 8300000, guid: c0328347d9ef35e439589230e4b4b4e2, type: 3}
   hurryUpClip: {fileID: 8300000, guid: 789350767b9cba646a10c141c868c1ae, type: 3}
+  warioOMGClip: {fileID: 8300000, guid: 618bf061398f3864e938b436679b92be, type: 3}
+  lawAndOrderThemeClip: {fileID: 8300000, guid: d980b8201b3d26e4ba22f7615a345133, type: 3}
   correctSuspectIndex: -1
   nonSeededFeatureChangeCount: 8
   suspectFeatureSlotCount: 8
@@ -6770,7 +6775,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2061645758}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6834,7 +6839,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: d7bc8003393edb647b27a848e9837a8a, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

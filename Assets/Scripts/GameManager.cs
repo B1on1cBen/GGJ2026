@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject gameOverText;
     [SerializeField] private Timer timer;
     [SerializeField] private GameObject EndScreen;
+    [SerializeField] private GameObject CurtainCanvas;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI timerText;
@@ -44,6 +45,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioClip[] drawMusic;
     [SerializeField] private AudioClip[] orderMusic;
     [SerializeField] private AudioClip introClip;
+    [SerializeField] private AudioClip dundunClip;
     [SerializeField] private AudioClip curtainCloseClip;
     [SerializeField] private AudioClip curtainOpenClip;
     [SerializeField] private AudioClip timerClip;
@@ -333,7 +335,10 @@ public class GameManager : MonoBehaviour
 
     private void ShowEndScreen()
     {
-        audioSource.PlayOneShot(lawAndOrderThemeClip);
+        musicSource.PlayOneShot(lawAndOrderThemeClip);
+        CurtainCanvas.SetActive(false);
+        orderSystem.poorlyUI.SetActive(false);
+        introState.SetActive(false);
         titleState.SetActive(true);
 
         // wait 3 seconds before showing end screen
@@ -385,6 +390,11 @@ public class GameManager : MonoBehaviour
         titleState.SetActive(state == GameState.Title);
         drawState.SetActive(state == GameState.Draw);
         orderState.SetActive(state == GameState.Order);
+
+        if (state == GameState.Title)
+        {
+            audioSource.PlayOneShot(dundunClip);
+        }
 
         if (state == GameState.Intro)
         {
