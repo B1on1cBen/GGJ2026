@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
 
     void UpdateDrawTimer()
     {
-        if (currentState != GameState.Draw || !sketchSystem.active) 
+        if (drawTimeOver || currentState != GameState.Draw || !sketchSystem.active) 
             return;
 
         drawTimer -= Time.deltaTime;
@@ -98,6 +98,18 @@ public class GameManager : MonoBehaviour
             sketchCamera.enabled = false;
             RequestStateChange(GameState.Order);
         }
+    }
+
+    public void OnDrawDonePressed()
+    {
+        if (drawTimeOver)
+            return;
+
+        drawTimeOver = true;
+        sketchSystem.Clear();
+        sketchSystem.active = false;
+        sketchCamera.enabled = false;
+        RequestStateChange(GameState.Order);
     }
 
     void LateUpdate()
@@ -170,10 +182,15 @@ public class GameManager : MonoBehaviour
         if (currentState == GameState.Draw)
             sketchSystem.active = true;
 
-        if (currentState == GameState.Order){
-            orderSystem.active = true;
-            Debug.Log("WHAT");
+        if (currentState == GameState.Order)
+        {
+            Invoke("ActivateOrderPhase", 1f);
         }
+    }
+
+    private void ActivateOrderPhase()
+    {
+        orderSystem.active = true;
     }
 
     private void SetStateImmediate(GameState state)

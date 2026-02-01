@@ -84,6 +84,7 @@ public class DrawPhase : GamePhase
 
             currentLineRenderer.positionCount = 0;
             AddPoint(mousePos);
+            AddPoint(mousePos, true);
         }
         else if (Input.GetMouseButton(0) && isDrawing)
         {
@@ -99,10 +100,10 @@ public class DrawPhase : GamePhase
         }
     }
 
-    private void AddPoint(Vector2 screenPos)
+    private void AddPoint(Vector2 screenPos, bool forceAdd = false)
     {
         Vector3 world = uiCamera.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, Mathf.Abs(uiCamera.transform.position.z) + worldZ));
-        if (currentPoints.Count > 0 && Vector3.Distance(currentPoints[currentPoints.Count - 1], world) < minPointDistance)
+        if (!forceAdd && currentPoints.Count > 0 && Vector3.Distance(currentPoints[currentPoints.Count - 1], world) < minPointDistance)
         {
             return;
         }
