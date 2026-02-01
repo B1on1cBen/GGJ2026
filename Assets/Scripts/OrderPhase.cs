@@ -219,17 +219,18 @@ public class OrderPhase : GamePhase
                     return;
                 _endSequenceTimer = 0f;
                 // set newspapers active according to number of wrongs in gamemanager
-                for (int i = 0; i < newspapers.Length; i++)
-                {
-                    if (i < GameManager.wrongs)
+                if (!correctChosen)
+                    for (int i = 0; i < newspapers.Length; i++)
                     {
-                        newspapers[i].SetActive(true);
+                        if (i < GameManager.wrongs)
+                        {
+                            newspapers[i].SetActive(true);
+                        }
+                        else
+                        {
+                            newspapers[i].SetActive(false);
+                        }
                     }
-                    else
-                    {
-                        newspapers[i].SetActive(false);
-                    }
-                }
 
                 continueButton.SetActive(true);
                 _endSequenceActive = false;

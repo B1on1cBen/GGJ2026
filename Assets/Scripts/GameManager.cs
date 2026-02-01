@@ -33,7 +33,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float baseDrawTime = 60f;
     [SerializeField] private float drawTimeDecreasePerRound = 5f;
     [SerializeField] private float minDrawTime = 15f;
-    [SerializeField] private float introDuration = 2f;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource introAudioSource;
+    [SerializeField] private AudioClip introClip;
+    [SerializeField] private AudioClip dunDunClip;
 
     private enum GameState { Intro, Title, Draw, Order, Transition }
     private GameState currentState = GameState.Intro;
@@ -46,6 +50,8 @@ public class GameManager : MonoBehaviour
     private float drawTimer;
     private float introTimer;
     private bool drawTimeOver = false;
+    private int introDelayMs;
+    private bool introClipFinished;
 
     public int correctSuspectIndex = -1;
 
@@ -86,9 +92,20 @@ public class GameManager : MonoBehaviour
 
         if (currentState == GameState.Intro)
         {
-            introTimer -= Time.deltaTime;
-            if (introTimer <= 0f)
+            if (introAudioSource != null && introAudioSource.isPlaying)
+                return;
+
+            if (!introClipFinished)
+            {
+                introClipFinished = true;
+                introDelayMs = 0;
+            }
+
+            introDelayMs += Mathf.RoundToInt(Time.deltaTime * 1000f);
+            if (introDelayMs >= 1000)
+            {
                 SetStateImmediate(GameState.Title);
+            }
             return;
         }
         if (currentState == GameState.Title && Input.anyKeyDown)
@@ -241,7 +258,16 @@ public class GameManager : MonoBehaviour
 
         if (state == GameState.Intro)
         {
-            introTimer = introDuration;
+            introDelayMs = 0;
+            introClipFinished = false;
+
+            if (introAudioSource != null)
+            {
+                introAudioSource.Stop();
+                if (introClip != null)
+                    introAudioSource.clip = introClip;
+                introAudioSource.Play();
+            }
         }
         else if (state == GameState.Draw)
         {
