@@ -112,6 +112,7 @@ public class OrderPhase : GamePhase
         _endSequenceActive = true;
         _endSequenceTimer = 0f;
         _endSequenceStep = 0;
+        correctChosen = _selectedSuspect == gameManager.suspects[gameManager.correctSuspectIndex];
     }
 
     private void TickEndRevealSequence(float dt)
@@ -131,6 +132,11 @@ public class OrderPhase : GamePhase
                 break;
 
             case 1:
+                if (correctChosen)
+                {
+                    _endSequenceStep++;
+                    return;
+                }
                 if (_endSequenceTimer < 2f) { return; }
                 _endSequenceTimer = 0f;
                 if (spotlightEffect != null)
@@ -144,9 +150,8 @@ public class OrderPhase : GamePhase
                 break;
 
             case 2:
-                if (_endSequenceTimer < 2f) { return; }
+                if (_endSequenceTimer < 1.5f) { return; }
                 _endSequenceTimer = 0f;
-                correctChosen = _selectedSuspect == gameManager.suspects[gameManager.correctSuspectIndex];
                 if (correctChosen)
                 {
                     correctUI.SetActive(true);
@@ -168,6 +173,7 @@ public class OrderPhase : GamePhase
                 }
                 else
                 {
+                    Debug.Log("BOOOOO!");
                     audioSource.PlayOneShot(booSound);
                     _selectedSuspect.Dance();
                 }

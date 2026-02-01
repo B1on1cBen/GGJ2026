@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject player1Text;
     [SerializeField] private GameObject player2Text;
     [SerializeField] private GameObject continueButton;
+    [SerializeField] private GameObject drawStickyNote;
+    [SerializeField] private TextMeshProUGUI phaseText;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI timerText;
@@ -109,6 +111,7 @@ public class GameManager : MonoBehaviour
         sketchSystem.Clear();
         sketchSystem.active = false;
         sketchCamera.enabled = false;
+        currentPlayer = currentPlayer == 1 ? 2 : 1;
         RequestStateChange(GameState.Order);
     }
 
@@ -155,6 +158,8 @@ public class GameManager : MonoBehaviour
         continueButton.SetActive(false);
         player1Text.SetActive(false);
         player2Text.SetActive(false);
+        drawStickyNote.SetActive(false);
+        phaseText.gameObject.SetActive(false);
         transitionController.Open();
     }
 
@@ -169,8 +174,15 @@ public class GameManager : MonoBehaviour
             orderState.SetActive(true);
 
         continueButton.SetActive(true);
+
         player1Text.SetActive(currentPlayer == 1);
         player2Text.SetActive(currentPlayer == 2);
+
+        drawStickyNote.SetActive(currentState == GameState.Draw);
+
+        phaseText.gameObject.SetActive(true);
+        phaseText.text = currentState == GameState.Draw ? "Draws!" : "Chooses!";
+
     }
 
     private void OnTransitionOpen()
