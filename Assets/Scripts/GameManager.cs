@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
     private void OnOrderPhaseEnded()
     {
         // Go back to draw phase
+        AdvanceRound();
         RequestStateChange(GameState.Draw);
     }
 
