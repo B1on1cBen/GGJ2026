@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject drawStickyNote;
     [SerializeField] private TextMeshProUGUI phaseText;
     [SerializeField] private GameObject gameOverText;
-    [SerializeField] private Animator timerAnimator;
+    [SerializeField] private Timer timer;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI timerText;
@@ -148,7 +148,7 @@ public class GameManager : MonoBehaviour
         {
             timerClipPlayedThisDraw = true;
             audioSource.PlayOneShot(timerClip);
-            timerAnimator.SetTrigger("Ring");
+            timer.SetRing();
             pendingOrderAfterRing = true;
             Invoke(nameof(TransitionToOrderAfterRing), timerClip.length);
         }
@@ -170,7 +170,7 @@ public class GameManager : MonoBehaviour
             {
                 timerClipPlayedThisDraw = true;
                 audioSource.PlayOneShot(timerClip);
-                timerAnimator.SetTrigger("Ring");
+                timer.SetRing();
                 pendingOrderAfterRing = true;
                 Invoke(nameof(TransitionToOrderAfterRing), timerClip.length);
             }
@@ -212,7 +212,7 @@ public class GameManager : MonoBehaviour
         sketchSystem.Clear();
         sketchSystem.active = false;
         sketchCamera.enabled = false;
-        timerAnimator.SetTrigger("Idle");
+        timer.SetIdle();
         currentPlayer = currentPlayer == 1 ? 2 : 1;
     }
 
@@ -350,8 +350,7 @@ public class GameManager : MonoBehaviour
             timerClipPlayedThisDraw = false;
             hurryUpClipPlayedThisDraw = false;
             pendingOrderAfterRing = false;
-            if (timerAnimator != null)
-                timerAnimator.SetTrigger("Idle");
+            timer.SetIdle();
 
             GenerateSuspectsWithPortraitSeed();
             drawTimer = Mathf.Max(minDrawTime, baseDrawTime - drawTimeDecreasePerRound * (currentRound - 1));
