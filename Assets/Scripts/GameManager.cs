@@ -155,6 +155,7 @@ public class GameManager : MonoBehaviour
         if (drawTimeOver)
             return;
 
+        StopMusic();
         drawTimeOver = true;
         sketchSystem.Clear();
         sketchSystem.active = false;
