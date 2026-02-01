@@ -97,6 +97,16 @@ public class GameManager : MonoBehaviour
 
         if (currentState == GameState.Intro)
         {
+            if (Input.anyKeyDown)
+            {
+                if (introAudioSource != null)
+                    introAudioSource.Stop();
+
+                introClipFinished = true;
+                SetStateImmediate(GameState.Title);
+                return;
+            }
+
             if (introAudioSource != null && introAudioSource.isPlaying)
                 return;
 
