@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -65,6 +66,10 @@ public class GameManager : MonoBehaviour
     private bool pendingOrderAfterRing;
 
     public int correctSuspectIndex = -1;
+
+    [Header("Suspect Variation")]
+    [SerializeField] private int nonSeededFeatureChangeCount = 8;
+    [SerializeField] private int suspectFeatureSlotCount = 8;
 
     void Awake()
     {
@@ -230,20 +235,48 @@ public class GameManager : MonoBehaviour
 
     public void GenerateSuspectsWithPortraitSeed()
     {
-        if (suspectPortrait == null) return;
+        // We need a new property for the amount of features we want to change on suspects that are not the seeded one.
+        // Then we randomly select features to change on those suspects, until we reach total amount of features to change.
+
+        if (suspectPortrait == null) 
+            return;
 
         var seed = Random.Range(int.MinValue, int.MaxValue);
         suspectPortrait.GenerateFace(seed);
         suspectPortrait2.GenerateFace(seed);
 
-        if (suspects == null || suspects.Length == 0) return;
+        if (suspects == null || suspects.Length == 0) 
+            return;
 
         correctSuspectIndex = Random.Range(0, suspects.Length);
         for (int i = 0; i < suspects.Length; i++)
         {
             var s = suspects[i];
             if (s == null) continue;
-            s.GenerateSuspect(i == correctSuspectIndex ? seed : (int?)null);
+
+            if (i == correctSuspectIndex)
+            {
+                s.GenerateSuspect(seed);
+            }
+            else
+            {
+                s.GenerateSuspect((int?)null);
+                ApplyFeatureChangesToSuspect(s, nonSeededFeatureChangeCount, suspectFeatureSlotCount);
+            }
+        }
+    }
+
+    private void ApplyFeatureChangesToSuspect(Suspect suspect, int changeCount, int featureSlots)
+    {
+        var chosen = new HashSet<int>();
+        var maxChanges = Mathf.Min(changeCount, featureSlots);
+        while (chosen.Count < maxChanges)
+        {
+            var idx = Random.Range(0, featureSlots);
+            if (chosen.Add(idx))
+            {
+                suspect.RandomizeFeatureByIndex(idx);
+            }
         }
     }
 
@@ -375,6 +408,8 @@ public class GameManager : MonoBehaviour
     private void AdvanceRound()
     {
         currentRound += 1;
+        nonSeededFeatureChangeCount -= 2;
+        nonSeededFeatureChangeCount = Mathf.Clamp(nonSeededFeatureChangeCount, 2, 8);
     }
 
     public void StopMusic()

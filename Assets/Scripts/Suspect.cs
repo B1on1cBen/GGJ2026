@@ -49,4 +49,9 @@ public class Suspect : MonoBehaviour
             faceManager.GenerateFace(seed);
         }
     }
+
+    public void RandomizeFeatureByIndex(int featureIndex)
+    {
+        GetComponentInChildren<FaceManager>().RandomizeFeatureByIndex(featureIndex);
+    }
 }

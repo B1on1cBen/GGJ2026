@@ -74,7 +74,6 @@ public class FaceManager : MonoBehaviour
     {
         Init();
 
-        //var previousState = Random.state;
         if (seed.HasValue)
         {
             faceSeed = seed.Value;
@@ -100,11 +99,45 @@ public class FaceManager : MonoBehaviour
         earsRenderer.sprite = selectedEars;
         hairRenderer.sprite = selectedHair;
         accessoryRenderer.sprite = selectedAccessory;
-        //beardRenderer.sprite = selectedBeard;
-        //moustacheRenderer.sprite = selectedMoustache;
+        beardRenderer.sprite = selectedBeard;
+        moustacheRenderer.sprite = selectedMoustache;
         eyebrowsRenderer.sprite = selectedEyebrows;
         noseRenderer.sprite = selectedNose;
+    }
 
-        //Random.state = previousState;
+    public void RandomizeFeatureByIndex(int featureIndex)
+    {
+        Init();
+
+        switch (featureIndex)
+        {
+            case 0:
+                eyesRenderer.sprite = eyes[Random.Range(0, eyes.Count)];
+                break;
+            case 1:
+                mouthRenderer.sprite = mouths[Random.Range(0, mouths.Count)];
+                break;
+            case 2:
+                earsRenderer.sprite = ears[Random.Range(0, ears.Count)];
+                break;
+            case 3:
+                hairRenderer.sprite = hair[Random.Range(0, hair.Count)];
+                break;
+            case 4:
+                accessoryRenderer.sprite = accessories[Random.Range(0, accessories.Count)];
+                break;
+            case 5:
+                beardRenderer.sprite = beard[Random.Range(0, beard.Count)];
+                break;
+            case 6:
+                moustacheRenderer.sprite = moustache[Random.Range(0, moustache.Count)];
+                break;
+            case 7:
+                eyebrowsRenderer.sprite = eyebrows[Random.Range(0, eyebrows.Count)];
+                break;
+            case 8:
+                noseRenderer.sprite = noses[Random.Range(0, noses.Count)];
+                break;
+        }
     }
 }
