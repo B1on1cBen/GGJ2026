@@ -31,7 +31,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.6333333
+        time: 0.76666665
         value: 191.06395
         inSlope: 175.16858
         outSlope: 175.16858
@@ -40,7 +40,7 @@ AnimationClip:
         inWeight: 0.035078496
         outWeight: 0.8447412
       - serializedVersion: 3
-        time: 0.6666667
+        time: 0.8333333
         value: 184.44598
         inSlope: 184.4538
         outSlope: 184.4538
@@ -49,7 +49,7 @@ AnimationClip:
         inWeight: 0.074965864
         outWeight: 0.12821645
       - serializedVersion: 3
-        time: 1.0833334
+        time: 1.6
         value: 13.314302
         inSlope: -58.791027
         outSlope: -58.791027
@@ -58,7 +58,7 @@ AnimationClip:
         inWeight: 0.12729836
         outWeight: 1
       - serializedVersion: 3
-        time: 1.1166667
+        time: 1.6666666
         value: 27.962036
         inSlope: 0
         outSlope: 0
@@ -67,7 +67,16 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.15
+        time: 1.7166667
+        value: 21
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 2
         value: 21
         inSlope: 0
         outSlope: 0
@@ -106,12 +115,12 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.15
+    m_StopTime: 2
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
     m_HasAdditiveReferencePose: 0
-    m_LoopTime: 1
+    m_LoopTime: 0
     m_LoopBlend: 0
     m_LoopBlendOrientation: 0
     m_LoopBlendPositionY: 0
@@ -136,7 +145,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.6333333
+        time: 0.76666665
         value: 191.06395
         inSlope: 175.16858
         outSlope: 175.16858
@@ -145,7 +154,7 @@ AnimationClip:
         inWeight: 0.035078496
         outWeight: 0.8447412
       - serializedVersion: 3
-        time: 0.6666667
+        time: 0.8333333
         value: 184.44598
         inSlope: 184.4538
         outSlope: 184.4538
@@ -154,7 +163,7 @@ AnimationClip:
         inWeight: 0.074965864
         outWeight: 0.12821645
       - serializedVersion: 3
-        time: 1.0833334
+        time: 1.6
         value: 13.314302
         inSlope: -58.791027
         outSlope: -58.791027
@@ -163,7 +172,7 @@ AnimationClip:
         inWeight: 0.12729836
         outWeight: 1
       - serializedVersion: 3
-        time: 1.1166667
+        time: 1.6666666
         value: 27.962036
         inSlope: 0
         outSlope: 0
@@ -172,7 +181,16 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.15
+        time: 1.7166667
+        value: 21
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 2
         value: 21
         inSlope: 0
         outSlope: 0
@@ -191,4 +209,11 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 2
+    functionName: OnCrusherEnter
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

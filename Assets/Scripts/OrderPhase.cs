@@ -11,6 +11,7 @@ public class OrderPhase : GamePhase
     [SerializeField] private Vector3 hoverArrowOffset = new Vector3(0f, 2f, 0f);
     [SerializeField] private GraphicRaycaster uiRaycaster;
     [SerializeField] private EventSystem eventSystem;
+    [SerializeField] private CrusherAnimRelay crusher;
 
     private Suspect _hoveredSuspect;
     private Shaker hoveredSuspectShaker;
@@ -19,6 +20,33 @@ public class OrderPhase : GamePhase
     private readonly List<RaycastResult> _uiHits = new List<RaycastResult>();
     private PointerEventData _pointerEventData;
 
+    void Awake()
+    {
+        crusher.OnCrusherBonkEvent += () =>
+        {
+            if (_selectedSuspect != null)
+            {
+                _selectedSuspect.gameObject.SetActive(false);
+            }
+        };
+    }
+    
+    void OnDisable()
+    {
+        if (hoverArrow != null)
+        {
+            hoverArrow.gameObject.SetActive(false);
+        }
+
+        _hoveredSuspect = null;
+        _selectedSuspect = null;
+
+        foreach (var suspect in FindObjectsOfType<Suspect>(true))
+        {
+            suspect.gameObject.SetActive(true);
+        }
+    }
+
     protected override void UpdatePhase()
     {
         UpdateHover();
@@ -26,6 +54,12 @@ public class OrderPhase : GamePhase
         if (Input.GetMouseButtonDown(0) && _hoveredSuspect != null)
         {
             _selectedSuspect = _hoveredSuspect;
+            if (crusher != null)
+            {
+                var pos = crusher.transform.position;
+                crusher.transform.position = new Vector3(_selectedSuspect.transform.position.x, pos.y, pos.z);
+                crusher.Crush();
+            }
             // TODO: handle selection logic
             Debug.Log("Selected suspect: " + _selectedSuspect.name);
         }
