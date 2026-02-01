@@ -13,6 +13,8 @@ public class DrawPhase : GamePhase
     [SerializeField] private LineRenderer lineRendererPrefab;
     [SerializeField] private float minPointDistance = 0.01f;
     [SerializeField] private float worldZ = 0f;
+    [SerializeField] AudioClip[] drawSounds;
+    [SerializeField] private AudioSource audioSource;
 
     private bool isDrawing;
     private List<Vector3> currentPoints = new List<Vector3>();
@@ -112,6 +114,12 @@ public class DrawPhase : GamePhase
         if (currentLineRenderer == null) return;
         currentLineRenderer.positionCount = currentPoints.Count;
         currentLineRenderer.SetPosition(currentPoints.Count - 1, world);
+
+        if (!forceAdd)
+        {
+            AudioClip clip = drawSounds[Random.Range(0, drawSounds.Length)];
+            audioSource.PlayOneShot(clip);
+        }
     }
 
     public bool IsMouseOver(Image targetImage)

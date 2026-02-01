@@ -5109,6 +5109,14 @@ MonoBehaviour:
   lineRendererPrefab: {fileID: 2043235826}
   minPointDistance: 0.01
   worldZ: 0
+  drawSounds:
+  - {fileID: 8300000, guid: ee8d49199768ce741b48fa25fb78f6a9, type: 3}
+  - {fileID: 8300000, guid: 8410ce708403bb04e8b804041f5d1f98, type: 3}
+  - {fileID: 8300000, guid: b12d3eef0015999499cbf92ded654a79, type: 3}
+  - {fileID: 8300000, guid: 39086aa0b5758c54d941a3f7a84c6d25, type: 3}
+  - {fileID: 8300000, guid: be67645df2899654f91ef5714a9ad4f3, type: 3}
+  - {fileID: 8300000, guid: 9ba96e64fc5ee7b429148c58b1b56630, type: 3}
+  audioSource: {fileID: 2053410382}
 --- !u!1 &1568078503
 GameObject:
   m_ObjectHideFlags: 0
