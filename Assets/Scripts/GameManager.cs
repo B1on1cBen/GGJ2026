@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
 
         if (currentState == GameState.Intro)
         {
-            if (Input.anyKeyDown)
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 if (introAudioSource != null)
                     introAudioSource.Stop();
@@ -138,7 +138,7 @@ public class GameManager : MonoBehaviour
 
         drawTimer -= Time.deltaTime;
         if (timerText != null)
-            timerText.text = Mathf.CeilToInt(drawTimer).ToString();
+            timerText.text = FormatTime(drawTimer);
 
         if (drawTimer <= 0f && !drawTimeOver)
         {
@@ -148,6 +148,14 @@ public class GameManager : MonoBehaviour
             sketchCamera.enabled = false;
             RequestStateChange(GameState.Order);
         }
+    }
+
+    private string FormatTime(float seconds)
+    {
+        var total = Mathf.Max(0, Mathf.CeilToInt(seconds));
+        var minutes = total / 60;
+        var secs = total % 60;
+        return $"{minutes}:{secs:00}";
     }
 
     public void OnDrawDonePressed()
@@ -299,7 +307,7 @@ public class GameManager : MonoBehaviour
             GenerateSuspectsWithPortraitSeed();
             drawTimer = Mathf.Max(minDrawTime, baseDrawTime - drawTimeDecreasePerRound * (currentRound - 1));
             if (timerText != null)
-                timerText.text = Mathf.CeilToInt(drawTimer).ToString();
+                timerText.text = FormatTime(drawTimer);
         }
     }
 
