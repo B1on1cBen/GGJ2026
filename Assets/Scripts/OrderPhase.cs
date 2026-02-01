@@ -112,6 +112,8 @@ public class OrderPhase : GamePhase
             hoverArrow.gameObject.SetActive(false);
             StopAllCoroutines();
 
+            gameManager.StopMusic();
+
             _selectedSuspect = _hoveredSuspect;
             var spotPos = spotlightEffect.transform.position;
             spotlightEffect.GetComponent<Image>().enabled = true;

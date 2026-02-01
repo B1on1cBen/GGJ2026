@@ -36,8 +36,13 @@ public class GameManager : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioSource introAudioSource;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioSource musicSource;
+    [SerializeField] private AudioClip[] drawMusic;
+    [SerializeField] private AudioClip[] orderMusic;
     [SerializeField] private AudioClip introClip;
-    [SerializeField] private AudioClip dunDunClip;
+    [SerializeField] private AudioClip curtainCloseClip;
+    [SerializeField] private AudioClip curtainOpenClip;
 
     private enum GameState { Intro, Title, Draw, Order, Transition }
     private GameState currentState = GameState.Intro;
@@ -185,6 +190,7 @@ public class GameManager : MonoBehaviour
         inputLocked = true;
         transitionState.SetActive(true);
         transitionController.Close();
+        audioSource.PlayOneShot(curtainCloseClip);
     }
 
     public void OnContinueButtonPressed()
@@ -195,6 +201,7 @@ public class GameManager : MonoBehaviour
         drawStickyNote.SetActive(false);
         phaseText.gameObject.SetActive(false);
         transitionController.Open();
+        audioSource.PlayOneShot(curtainOpenClip);
     }
 
     private void OnTransitionClosed()
@@ -234,11 +241,15 @@ public class GameManager : MonoBehaviour
         transitionState.SetActive(false);
 
         if (currentState == GameState.Draw)
+        {
             sketchSystem.active = true;
+            PlayRandomMusic(drawMusic);
+        }
 
         if (currentState == GameState.Order)
         {
             Invoke("ActivateOrderPhase", 1f);
+            PlayRandomMusic(orderMusic);
         }
     }
 
@@ -281,8 +292,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void PlayRandomMusic(AudioClip[] clips)
+    {
+        if (musicSource == null || clips == null || clips.Length == 0) 
+            return;
+
+        var clip = clips[Random.Range(0, clips.Length)];
+        if (clip == null) 
+            return;
+
+        musicSource.clip = clip;
+        musicSource.Play();
+    }
+
     private void AdvanceRound()
     {
         currentRound += 1;
+    }
+
+    public void StopMusic()
+    {
+        if (musicSource == null) return;
+        musicSource.Stop();
     }
 }
