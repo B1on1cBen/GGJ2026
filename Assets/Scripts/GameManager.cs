@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
             }
 
             introDelayMs += Mathf.RoundToInt(Time.deltaTime * 1000f);
-            if (introDelayMs >= 1000)
+            if (introDelayMs >= 500)
             {
                 SetStateImmediate(GameState.Title);
             }
@@ -311,7 +311,7 @@ public class GameManager : MonoBehaviour
 
         if (currentState == GameState.Order)
         {
-            Invoke("ActivateOrderPhase", 1f);
+            Invoke("ActivateOrderPhase", .25f);
             PlayRandomMusic(orderMusic);
         }
     }

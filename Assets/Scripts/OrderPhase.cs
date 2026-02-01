@@ -28,6 +28,8 @@ public class OrderPhase : GamePhase
     [SerializeField] private GameObject continueButton;
     [SerializeField] private GameObject portrait;
     [SerializeField] private GameObject[] newspapers;
+    [SerializeField] private AudioClip[] warioYeah;
+    [SerializeField] private AudioClip[] warioNo;
 
     public event Action OrderPhaseEnded;
 
@@ -221,7 +223,7 @@ public class OrderPhase : GamePhase
                     return;
                 _endSequenceTimer = 0f;
                 // set newspapers active according to number of wrongs in gamemanager
-                if (!correctChosen)
+                if (!correctChosen){
                     for (int i = 0; i < newspapers.Length; i++)
                     {
                         if (i < GameManager.wrongs)
@@ -233,6 +235,13 @@ public class OrderPhase : GamePhase
                             newspapers[i].SetActive(false);
                         }
                     }
+                    int warioNoIndex = UnityEngine.Random.Range(0, warioNo.Length);
+                    audioSource.PlayOneShot(warioNo[warioNoIndex]);
+                }
+                else
+                {
+                    audioSource.PlayOneShot(warioYeah[UnityEngine.Random.Range(0, warioYeah.Length)]);
+                }
 
                 continueButton.SetActive(true);
                 _endSequenceActive = false;

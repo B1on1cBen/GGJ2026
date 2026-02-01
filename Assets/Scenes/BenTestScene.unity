@@ -4964,6 +4964,14 @@ MonoBehaviour:
   - {fileID: 2079061790}
   - {fileID: 139665469}
   - {fileID: 1216339468}
+  warioYeah:
+  - {fileID: 8300000, guid: e18e3f3bfc1e22747b55aa009f29247d, type: 3}
+  - {fileID: 8300000, guid: fa53756b0839350498b176d9ee6492bc, type: 3}
+  - {fileID: 8300000, guid: 133121d3c23041b40862de00374c2f64, type: 3}
+  warioNo:
+  - {fileID: 8300000, guid: d99d8cf1bee5c8c46a0b129dda6ca61d, type: 3}
+  - {fileID: 8300000, guid: b8b90f1d8a82c964690f1e1830f1ea36, type: 3}
+  - {fileID: 8300000, guid: 94b6e81584277884398365c6a52865e6, type: 3}
 --- !u!1 &1530187431
 GameObject:
   m_ObjectHideFlags: 0
@@ -6504,7 +6512,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
