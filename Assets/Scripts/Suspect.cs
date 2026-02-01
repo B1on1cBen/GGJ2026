@@ -50,8 +50,23 @@ public class Suspect : MonoBehaviour
         }
     }
 
+    public FaceManager.FaceParts GetFaceParts()
+    {
+        var faceManager = GetComponentInChildren<FaceManager>();
+        return faceManager != null ? faceManager.GetFaceParts() : default;
+    }
+
+    public void ApplyFaceParts(FaceManager.FaceParts parts)
+    {
+        var faceManager = GetComponentInChildren<FaceManager>();
+        if (faceManager != null)
+            faceManager.ApplyFaceParts(parts);
+    }
+
     public void RandomizeFeatureByIndex(int featureIndex)
     {
-        GetComponentInChildren<FaceManager>().RandomizeFeatureByIndex(featureIndex);
+        var faceManager = GetComponentInChildren<FaceManager>();
+        if (faceManager != null)
+            faceManager.RandomizeFeatureByIndex(featureIndex);
     }
 }

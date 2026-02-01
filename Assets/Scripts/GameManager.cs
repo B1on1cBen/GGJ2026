@@ -235,28 +235,33 @@ public class GameManager : MonoBehaviour
 
     public void GenerateSuspectsWithPortraitSeed()
     {
-        // We need a new property for the amount of features we want to change on suspects that are not the seeded one.
-        // Then we randomly select features to change on those suspects, until we reach total amount of features to change.
-
         if (suspectPortrait == null) 
             return;
-
-        var seed = Random.Range(int.MinValue, int.MaxValue);
-        suspectPortrait.GenerateFace(seed);
-        suspectPortrait2.GenerateFace(seed);
 
         if (suspects == null || suspects.Length == 0) 
             return;
 
         correctSuspectIndex = Random.Range(0, suspects.Length);
+
+        // Generate correct suspect once and store its face parts
+        var correctSuspect = suspects[correctSuspectIndex];
+        correctSuspect.GenerateSuspect(null);
+        var correctParts = correctSuspect.GetFaceParts();
+
+        // Apply correct parts to portraits
+        suspectPortrait.ApplyFaceParts(correctParts);
+        suspectPortrait2.ApplyFaceParts(correctParts);
+
+        // Apply to others, then randomize features
         for (int i = 0; i < suspects.Length; i++)
         {
             var s = suspects[i];
-            s.GenerateSuspect(seed);
-            if (i != correctSuspectIndex)
-            {
-                ApplyFeatureChangesToSuspect(s, nonSeededFeatureChangeCount, suspectFeatureSlotCount);
-            }
+            if (i == correctSuspectIndex) 
+                continue;
+
+            s.GenerateSuspect(null);
+            s.ApplyFaceParts(correctParts);
+            ApplyFeatureChangesToSuspect(s, nonSeededFeatureChangeCount, suspectFeatureSlotCount);
         }
     }
 
@@ -265,7 +270,6 @@ public class GameManager : MonoBehaviour
         var chosenIndexes = new List<int>();
         while (chosenIndexes.Count < changeCount)
         {
-            Random.InitState(Random.Range(int.MinValue, int.MaxValue));
             var idx = Random.Range(0, featureSlots);
             if (!chosenIndexes.Contains(idx))
             {

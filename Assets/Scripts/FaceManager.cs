@@ -140,4 +140,56 @@ public class FaceManager : MonoBehaviour
                 break;
         }
     }
+
+    public struct FaceParts
+    {
+        public Sprite Eyes;
+        public Sprite Mouth;
+        public Sprite Ears;
+        public Sprite Hair;
+        public Sprite Accessory;
+        public Sprite Beard;
+        public Sprite Moustache;
+        public Sprite Eyebrows;
+        public Sprite Nose;
+    }
+
+    public FaceParts GetFaceParts()
+    {
+        return new FaceParts
+        {
+            Eyes = selectedEyes,
+            Mouth = selectedMouth,
+            Ears = selectedEars,
+            Hair = selectedHair,
+            Accessory = selectedAccessory,
+            Beard = selectedBeard,
+            Moustache = selectedMoustache,
+            Eyebrows = selectedEyebrows,
+            Nose = selectedNose
+        };
+    }
+
+    public void ApplyFaceParts(FaceParts parts)
+    {
+        selectedEyes = parts.Eyes;
+        selectedMouth = parts.Mouth;
+        selectedEars = parts.Ears;
+        selectedHair = parts.Hair;
+        selectedAccessory = parts.Accessory;
+        selectedBeard = parts.Beard;
+        selectedMoustache = parts.Moustache;
+        selectedEyebrows = parts.Eyebrows;
+        selectedNose = parts.Nose;
+
+        eyesRenderer.sprite = selectedEyes;
+        mouthRenderer.sprite = selectedMouth;
+        earsRenderer.sprite = selectedEars;
+        hairRenderer.sprite = selectedHair;
+        accessoryRenderer.sprite = selectedAccessory;
+        beardRenderer.sprite = selectedBeard;
+        moustacheRenderer.sprite = selectedMoustache;
+        eyebrowsRenderer.sprite = selectedEyebrows;
+        noseRenderer.sprite = selectedNose;
+    }
 }
