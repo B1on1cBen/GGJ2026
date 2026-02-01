@@ -4,6 +4,7 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private FaceManager suspectPortrait;
+    [SerializeField] private FaceManager suspectPortrait2;
     [SerializeField] public Suspect[] suspects;
     [SerializeField] private DrawPhase sketchSystem;
     [SerializeField] private OrderPhase orderSystem;
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour
     private GameState pendingState;
 
     public static bool inputLocked;
+    public static int wrongs = 0;
     private int currentPlayer = 1;
     private int currentRound = 1;
     private float drawTimer;
@@ -139,6 +141,7 @@ public class GameManager : MonoBehaviour
 
         var seed = Random.Range(int.MinValue, int.MaxValue);
         suspectPortrait.GenerateFace(seed);
+        suspectPortrait2.GenerateFace(seed);
 
         if (suspects == null || suspects.Length == 0) return;
 

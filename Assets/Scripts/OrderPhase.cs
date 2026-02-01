@@ -26,6 +26,8 @@ public class OrderPhase : GamePhase
     [SerializeField] private AudioClip cheerSound;
     [SerializeField] private AudioClip youChoseSound;
     [SerializeField] private GameObject continueButton;
+    [SerializeField] private GameObject portrait;
+    [SerializeField] private GameObject[] newspapers;
 
     public event Action OrderPhaseEnded;
 
@@ -91,6 +93,12 @@ public class OrderPhase : GamePhase
         continueButton.SetActive(false);
         sketch.SetActive(true);
         active = false;
+
+        portrait.SetActive(false);
+        for (int i = 0; i < newspapers.Length; i++)
+        {
+            newspapers[i].SetActive(false);
+        }
     }
 
     protected override void UpdatePhase()
@@ -133,6 +141,10 @@ public class OrderPhase : GamePhase
         _endSequenceTimer = 0f;
         _endSequenceStep = 0;
         correctChosen = _selectedSuspect == gameManager.suspects[gameManager.correctSuspectIndex];
+        if (!correctChosen)
+        {
+            GameManager.wrongs += 1;
+        }
     }
 
     private void TickEndRevealSequence(float dt)
@@ -187,6 +199,7 @@ public class OrderPhase : GamePhase
 
             case 3:
                 if (_endSequenceTimer < 2f) { return; }
+                _endSequenceTimer = 0f;
                 if (correctChosen)
                 {
                     audioSource.PlayOneShot(cheerSound);
@@ -198,11 +211,25 @@ public class OrderPhase : GamePhase
                     gameManager.suspects[gameManager.correctSuspectIndex].Dance();
                 }
                 sketch.SetActive(true);
+                portrait.SetActive(true);
                 _endSequenceStep++;
                 break;
             case 4:
                 if (_endSequenceTimer < 2f)
                     return;
+                _endSequenceTimer = 0f;
+                // set newspapers active according to number of wrongs in gamemanager
+                for (int i = 0; i < newspapers.Length; i++)
+                {
+                    if (i < GameManager.wrongs)
+                    {
+                        newspapers[i].SetActive(true);
+                    }
+                    else
+                    {
+                        newspapers[i].SetActive(false);
+                    }
+                }
 
                 continueButton.SetActive(true);
                 _endSequenceActive = false;
