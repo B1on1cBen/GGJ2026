@@ -28,6 +28,12 @@ public class Suspect : MonoBehaviour
         dance.SetActive(true);
     }
 
+    public void StopDance()
+    {
+        dance.SetActive(false);
+        bodySprite.gameObject.SetActive(true);
+    }
+
     public void GenerateSuspect(int? seed)
     {
         EnsureBodiesLoaded();

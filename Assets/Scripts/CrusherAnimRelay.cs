@@ -21,6 +21,11 @@ public class CrusherAnimRelay : MonoBehaviour
         audioSource.PlayOneShot(enterSound);
     }
 
+    public void Reset()
+    {
+        animator.SetTrigger("Idle");
+    }
+
     void Awake()
     {
         animator = GetComponentInChildren<Animator>();

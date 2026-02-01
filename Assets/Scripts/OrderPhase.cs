@@ -74,7 +74,23 @@ public class OrderPhase : GamePhase
         foreach (var suspect in FindObjectsOfType<Suspect>(true))
         {
             suspect.gameObject.SetActive(true);
+            suspect.StopDance();
         }
+
+        // Reset end sequence state
+        crusher.Reset();
+        _endSequenceActive = false;
+        _endSequenceTimer = 0f;
+        _endSequenceStep = 0;
+        correctChosen = false;
+        selected = false;
+        spotlightEffect.GetComponent<Image>().enabled = false;
+        youChoseUI.SetActive(false);
+        correctUI.SetActive(false);
+        poorlyUI.SetActive(false);
+        continueButton.SetActive(false);
+        sketch.SetActive(true);
+        active = false;
     }
 
     protected override void UpdatePhase()
