@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject continueButton;
     [SerializeField] private GameObject drawStickyNote;
     [SerializeField] private TextMeshProUGUI phaseText;
+    [SerializeField] private GameObject gameOverText;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI timerText;
@@ -72,6 +73,12 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
             GenerateSuspectsWithPortraitSeed();
         #endif
+
+        // if gameover and any key, quit
+        if (gameOverText.activeSelf && Input.anyKeyDown)
+        {
+            Application.Quit();
+        }
 
         if (inputLocked) 
             return;
@@ -174,6 +181,14 @@ public class GameManager : MonoBehaviour
 
     private void OnTransitionClosed()
     {
+        // If 3 wrongs, game over
+        if (GameManager.wrongs >= 3)
+        {
+            Debug.Log("Game Over!");
+            gameOverText.SetActive(true);
+            return;
+        }
+
         Debug.Log("OnTransitionMiddle: " + pendingState);
         SetStateImmediate(pendingState);
         if (currentState == GameState.Draw)
