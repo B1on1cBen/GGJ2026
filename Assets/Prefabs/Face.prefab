@@ -92,7 +92,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8309800820656887829
 RectTransform:
   m_ObjectHideFlags: 0
@@ -167,7 +167,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8780769105403605156
 RectTransform:
   m_ObjectHideFlags: 0
@@ -526,7 +526,6 @@ MonoBehaviour:
   eyebrowsRenderer: {fileID: 850741850861871847}
   noseRenderer: {fileID: 6937918323093834590}
   faceSeed: 0
-  generate: 0
 --- !u!1 &5164956218763881096
 GameObject:
   m_ObjectHideFlags: 0

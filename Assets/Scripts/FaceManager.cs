@@ -59,7 +59,7 @@ public class FaceManager : MonoBehaviour
         hair = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Hair"));
         accessories = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Accessories"));
         beard = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Beard"));
-        moustache = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Moustache"));
+        moustache = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Mustache"));
         eyebrows = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Eyebrows"));
         noses = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Nose"));
     }

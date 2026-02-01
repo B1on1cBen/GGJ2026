@@ -252,15 +252,9 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < suspects.Length; i++)
         {
             var s = suspects[i];
-            if (s == null) continue;
-
-            if (i == correctSuspectIndex)
+            s.GenerateSuspect(seed);
+            if (i != correctSuspectIndex)
             {
-                s.GenerateSuspect(seed);
-            }
-            else
-            {
-                s.GenerateSuspect((int?)null);
                 ApplyFeatureChangesToSuspect(s, nonSeededFeatureChangeCount, suspectFeatureSlotCount);
             }
         }
@@ -268,16 +262,18 @@ public class GameManager : MonoBehaviour
 
     private void ApplyFeatureChangesToSuspect(Suspect suspect, int changeCount, int featureSlots)
     {
-        var chosen = new HashSet<int>();
-        var maxChanges = Mathf.Min(changeCount, featureSlots);
-        while (chosen.Count < maxChanges)
+        var chosenIndexes = new List<int>();
+        while (chosenIndexes.Count < changeCount)
         {
+            Random.InitState(Random.Range(int.MinValue, int.MaxValue));
             var idx = Random.Range(0, featureSlots);
-            if (chosen.Add(idx))
+            if (!chosenIndexes.Contains(idx))
             {
+                chosenIndexes.Add(idx);
                 suspect.RandomizeFeatureByIndex(idx);
             }
         }
+        chosenIndexes.Clear();
     }
 
     private void RequestStateChange(GameState next)

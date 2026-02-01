@@ -6235,6 +6235,8 @@ MonoBehaviour:
   timerClip: {fileID: 8300000, guid: c0328347d9ef35e439589230e4b4b4e2, type: 3}
   hurryUpClip: {fileID: 8300000, guid: 789350767b9cba646a10c141c868c1ae, type: 3}
   correctSuspectIndex: -1
+  nonSeededFeatureChangeCount: 8
+  suspectFeatureSlotCount: 8
 --- !u!82 &2053410382
 AudioSource:
   m_ObjectHideFlags: 0
