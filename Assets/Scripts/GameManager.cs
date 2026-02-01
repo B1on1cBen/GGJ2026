@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI phaseText;
     [SerializeField] private GameObject gameOverText;
     [SerializeField] private Timer timer;
+    [SerializeField] private GameObject EndScreen;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI timerText;
@@ -47,6 +48,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioClip curtainOpenClip;
     [SerializeField] private AudioClip timerClip;
     [SerializeField] private AudioClip hurryUpClip;
+    [SerializeField] private AudioClip warioOMGClip;
+    [SerializeField] private AudioClip lawAndOrderThemeClip;
 
     private enum GameState { Intro, Title, Draw, Order, Transition }
     private GameState currentState = GameState.Intro;
@@ -96,12 +99,6 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
             GenerateSuspectsWithPortraitSeed();
         #endif
-
-        // if gameover and any key, quit
-        if (gameOverText.activeSelf && Input.anyKeyDown)
-        {
-            Application.Quit();
-        }
 
         if (inputLocked) 
             return;
@@ -307,6 +304,11 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Game Over!");
             gameOverText.SetActive(true);
+            audioSource.PlayOneShot(warioOMGClip);
+
+            // wait for 2 seconds, then play law and order theme and show end screen
+            Invoke("ShowEndScreen", 2f);
+
             return;
         }
 
@@ -327,7 +329,28 @@ public class GameManager : MonoBehaviour
 
         phaseText.gameObject.SetActive(true);
         phaseText.text = currentState == GameState.Draw ? "Draws!" : "Chooses!";
+    }
 
+    private void ShowEndScreen()
+    {
+        audioSource.PlayOneShot(lawAndOrderThemeClip);
+        titleState.SetActive(true);
+
+        // wait 3 seconds before showing end screen
+        Invoke("ActivateEndScreen", 3f);
+    }
+
+    private void ActivateEndScreen()
+    {
+        EndScreen.SetActive(true);
+
+        // wait 3 seconds and then quit application
+        Invoke("QuitApplication", 3f);
+    }
+
+    private void QuitApplication()
+    {
+        Application.Quit();
     }
 
     private void OnTransitionOpen()
