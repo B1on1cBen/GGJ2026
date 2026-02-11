@@ -62,7 +62,6 @@ public class GameManager : MonoBehaviour
     private int currentPlayer = 1;
     private int currentRound = 1;
     private float drawTimer;
-    private float introTimer;
     private bool drawTimeOver = false;
     private int introDelayMs;
     private bool introClipFinished;
