@@ -14,6 +14,7 @@ public class FaceManager : MonoBehaviour
     [SerializeField] private static List<Sprite> noses = new List<Sprite>();
     [SerializeField] private static List<Sprite> beard = new List<Sprite>();
     [SerializeField] private static List<Sprite> moustache = new List<Sprite>();
+    [SerializeField] private static Sprite empty;
 
     [Header("Selected Face Parts")]
     [SerializeField] private Sprite selectedEyes;
@@ -25,7 +26,7 @@ public class FaceManager : MonoBehaviour
     [SerializeField] private Sprite selectedMoustache;
     [SerializeField] private Sprite selectedEyebrows;
     [SerializeField] private Sprite selectedNose;
-
+    
     [Header("Face Part Renderers")]
     [SerializeField] private Image eyesRenderer;
     [SerializeField] private Image mouthRenderer;
@@ -40,9 +41,14 @@ public class FaceManager : MonoBehaviour
     [Header("Face Seed")]
     [SerializeField] private int faceSeed;
     public int FaceSeed => faceSeed;
+    
+    private static readonly float accessoryEmptyChance = 0.50f;
+    private static readonly float beardEmptyChance     = 0.45f;
+    private static readonly float hairEmptyChance      = 0.24f;
+    private static readonly float moustacheEmptyChance = 0.42f;
 
     static bool init = false;
-
+    
     void Awake()
     {
         Init();
@@ -62,12 +68,19 @@ public class FaceManager : MonoBehaviour
         moustache = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Mustache"));
         eyebrows = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Eyebrows"));
         noses = new List<Sprite>(Resources.LoadAll<Sprite>("Faces/Nose"));
+        empty = Resources.Load<Sprite>("Faces/Faces-EMPTY");
     }
-
-    Image FindImageByName(string objectName)
+    
+    private static Sprite GetRandomFromList(List<Sprite> sprites)
     {
-        var go = GameObject.Find(objectName);
-        return go != null ? go.GetComponent<Image>() : null;
+        if (sprites == null || sprites.Count <= 0) return null;
+        return sprites[Random.Range(0, sprites.Count)];
+    }
+    
+    private static Sprite GetRandomOrEmpty(List<Sprite> sprites, Sprite emptySprite, float emptyChance)
+    {
+        if (Random.value < Mathf.Clamp01(emptyChance)) return emptySprite;
+        return GetRandomFromList(sprites);
     }
 
     public void GenerateFace(int? seed)
@@ -108,35 +121,44 @@ public class FaceManager : MonoBehaviour
     public void RandomizeFeatureByIndex(int featureIndex)
     {
         Init();
-
+        
         switch (featureIndex)
         {
             case 0:
-                eyesRenderer.sprite = eyes[Random.Range(0, eyes.Count)];
+                selectedEyes = GetRandomFromList(eyes);
+                eyesRenderer.sprite = selectedEyes;
                 break;
             case 1:
-                mouthRenderer.sprite = mouths[Random.Range(0, mouths.Count)];
+                selectedMouth = GetRandomFromList(mouths);
+                mouthRenderer.sprite = selectedMouth;
                 break;
             case 2:
-                earsRenderer.sprite = ears[Random.Range(0, ears.Count)];
+                selectedEars = GetRandomFromList(ears);
+                earsRenderer.sprite = selectedEars;
                 break;
             case 3:
-                hairRenderer.sprite = hair[Random.Range(0, hair.Count)];
+                selectedHair = GetRandomOrEmpty(hair, empty, hairEmptyChance);
+                hairRenderer.sprite = selectedHair;
                 break;
             case 4:
-                accessoryRenderer.sprite = accessories[Random.Range(0, accessories.Count)];
+                selectedAccessory = GetRandomOrEmpty(accessories, empty, accessoryEmptyChance);
+                accessoryRenderer.sprite = selectedAccessory;
                 break;
             case 5:
-                beardRenderer.sprite = beard[Random.Range(0, beard.Count)];
+                selectedBeard = GetRandomOrEmpty(beard, empty, beardEmptyChance);
+                beardRenderer.sprite = selectedBeard;
                 break;
             case 6:
-                moustacheRenderer.sprite = moustache[Random.Range(0, moustache.Count)];
+                selectedMoustache = GetRandomOrEmpty(moustache, empty, moustacheEmptyChance);
+                moustacheRenderer.sprite = selectedMoustache;
                 break;
             case 7:
-                eyebrowsRenderer.sprite = eyebrows[Random.Range(0, eyebrows.Count)];
+                selectedEyebrows = GetRandomFromList(eyebrows);
+                eyebrowsRenderer.sprite = selectedEyebrows;
                 break;
             case 8:
-                noseRenderer.sprite = noses[Random.Range(0, noses.Count)];
+                selectedNose = GetRandomFromList(noses);
+                noseRenderer.sprite = selectedNose;
                 break;
         }
     }

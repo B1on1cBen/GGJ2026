@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 
+
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private FaceManager suspectPortrait;
@@ -230,52 +231,150 @@ public class GameManager : MonoBehaviour
         AdvanceRound();
         RequestStateChange(GameState.Transition);
     }
-
+    
     public void GenerateSuspectsWithPortraitSeed()
     {
         if (suspectPortrait == null) 
             return;
-
+        
         if (suspects == null || suspects.Length == 0) 
             return;
-
+        
         correctSuspectIndex = Random.Range(0, suspects.Length);
-
+        
         // Generate correct suspect once and store its face parts
         var correctSuspect = suspects[correctSuspectIndex];
         correctSuspect.GenerateSuspect(null);
         var correctParts = correctSuspect.GetFaceParts();
 
+        var usedFaceSignatures = new HashSet<string>();
+        var correctSignature = GetFaceSignature(correctParts);
+        usedFaceSignatures.Add(correctSignature);
+        
         // Apply correct parts to portraits
         suspectPortrait.ApplyFaceParts(correctParts);
         suspectPortrait2.ApplyFaceParts(correctParts);
-
+        
         // Apply to others, then randomize features
         for (int i = 0; i < suspects.Length; i++)
         {
             var s = suspects[i];
             if (i == correctSuspectIndex) 
                 continue;
-
+            
             s.GenerateSuspect(null);
-            s.ApplyFaceParts(correctParts);
-            ApplyFeatureChangesToSuspect(s, nonSeededFeatureChangeCount, suspectFeatureSlotCount);
+            if (!TryMakeSuspectUnique(s, correctParts, correctSignature, usedFaceSignatures, nonSeededFeatureChangeCount, suspectFeatureSlotCount))
+            {
+                Debug.LogWarning($"Failed to create a unique suspect face after retries (index {i}). Consider increasing available face parts or feature slots.");
+            }
         }
     }
 
-    private void ApplyFeatureChangesToSuspect(Suspect suspect, int changeCount, int featureSlots)
+    private bool TryMakeSuspectUnique(
+        Suspect suspect,
+        FaceManager.FaceParts correctParts,
+        string correctSignature,
+        HashSet<string> usedFaceSignatures,
+        int changeCount,
+        int featureSlots)
     {
-        var chosenIndexes = new List<int>();
+        if (suspect == null)
+            return false;
+
+        featureSlots = Mathf.Clamp(featureSlots, 1, 9);
+        changeCount = Mathf.Clamp(changeCount, 1, featureSlots);
+
+        const int maxAttempts = 40;
+        const int perSlotRetries = 12;
+
+        // Attempt: start from the correct face, then force feature differences.
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
+        {
+            suspect.ApplyFaceParts(correctParts);
+            ApplyFeatureChangesEnsuringDifferentFromCorrect(suspect, correctParts, changeCount, featureSlots, perSlotRetries);
+
+            var sig = GetFaceSignature(suspect.GetFaceParts());
+            if (sig != correctSignature && !usedFaceSignatures.Contains(sig))
+            {
+                usedFaceSignatures.Add(sig);
+                return true;
+            }
+        }
+
+        // Fallback: fully re-roll face until it's unique and not equal to correct.
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
+        {
+            suspect.GenerateSuspect(null);
+            var sig = GetFaceSignature(suspect.GetFaceParts());
+            if (sig != correctSignature && !usedFaceSignatures.Contains(sig))
+            {
+                usedFaceSignatures.Add(sig);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void ApplyFeatureChangesEnsuringDifferentFromCorrect(
+        Suspect suspect,
+        FaceManager.FaceParts correctParts,
+        int changeCount,
+        int featureSlots,
+        int perSlotRetries)
+    {
+        var chosenIndexes = new List<int>(changeCount);
         while (chosenIndexes.Count < changeCount)
         {
             var idx = Random.Range(0, featureSlots);
             if (!chosenIndexes.Contains(idx))
-            {
                 chosenIndexes.Add(idx);
-                suspect.RandomizeFeatureByIndex(idx);
+        }
+
+        for (int i = 0; i < chosenIndexes.Count; i++)
+        {
+            var featureIndex = chosenIndexes[i];
+            var correctPart = GetPartByFeatureIndex(correctParts, featureIndex);
+
+            for (int retry = 0; retry < perSlotRetries; retry++)
+            {
+                suspect.RandomizeFeatureByIndex(featureIndex);
+                var currentParts = suspect.GetFaceParts();
+                var currentPart = GetPartByFeatureIndex(currentParts, featureIndex);
+                if (currentPart != correctPart)
+                    break;
             }
         }
+
         chosenIndexes.Clear();
+    }
+
+    private static Sprite GetPartByFeatureIndex(FaceManager.FaceParts parts, int featureIndex)
+    {
+        switch (featureIndex)
+        {
+            case 0: return parts.Eyes;
+            case 1: return parts.Mouth;
+            case 2: return parts.Ears;
+            case 3: return parts.Hair;
+            case 4: return parts.Accessory;
+            case 5: return parts.Beard;
+            case 6: return parts.Moustache;
+            case 7: return parts.Eyebrows;
+            case 8: return parts.Nose;
+            default: return null;
+        }
+    }
+
+    private static string GetFaceSignature(FaceManager.FaceParts parts)
+    {
+        // InstanceID-based signature is stable for the lifetime of loaded assets.
+        return $"{GetSpriteId(parts.Eyes)}|{GetSpriteId(parts.Mouth)}|{GetSpriteId(parts.Ears)}|{GetSpriteId(parts.Hair)}|{GetSpriteId(parts.Accessory)}|{GetSpriteId(parts.Beard)}|{GetSpriteId(parts.Moustache)}|{GetSpriteId(parts.Eyebrows)}|{GetSpriteId(parts.Nose)}";
+    }
+
+    private static int GetSpriteId(Sprite sprite)
+    {
+        return sprite != null ? sprite.GetInstanceID() : 0;
     }
 
     private void RequestStateChange(GameState next)
