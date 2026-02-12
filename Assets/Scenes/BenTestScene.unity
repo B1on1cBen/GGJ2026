@@ -2506,8 +2506,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 772.38, y: 922.53}
+  m_AnchoredPosition: {x: 5, y: 8}
+  m_SizeDelta: {x: 590.17, y: 922.53}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &767971784
 MonoBehaviour:
@@ -2531,7 +2531,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 4194529236c79a7409f4a678fcf76503, type: 3}
   m_Type: 0
-  m_PreserveAspect: 1
+  m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -3730,8 +3730,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -7.71, y: 36.64}
-  m_SizeDelta: {x: 651.24, y: 499.06}
+  m_AnchoredPosition: {x: 0, y: 43.599976}
+  m_SizeDelta: {x: 510.93, y: 510.93}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1064395609
 MonoBehaviour:
@@ -3746,7 +3746,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0, g: 0.11920643, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 0
@@ -3898,7 +3898,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 2.0965428
+  orthographic size: 2.3725197
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -3923,7 +3923,7 @@ Transform:
   m_GameObject: {fileID: 1138499944}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.33, z: -2.31}
+  m_LocalPosition: {x: 0, y: 0.406, z: -2.31}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5942,7 +5942,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!223 &1920658297
 Canvas:
   m_ObjectHideFlags: 0
